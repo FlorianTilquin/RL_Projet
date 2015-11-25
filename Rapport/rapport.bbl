@@ -1,0 +1,29 @@
+\begin{thebibliography}{1}
+
+\bibitem{azar2014online}
+Mohammad~Gheshlaghi Azar, Alessandro Lazaric, and Emma Brunskill.
+\newblock Online stochastic optimization under correlated bandit feedback.
+\newblock {\em arXiv preprint arXiv:1402.0562}, 2014.
+
+\bibitem{bubeck2011x}
+S{\'e}bastien Bubeck, R{\'e}mi Munos, Gilles Stoltz, and Csaba Szepesvari.
+\newblock X-armed bandits.
+\newblock {\em The Journal of Machine Learning Research}, 12:1655--1695, 2011.
+
+\bibitem{bull2013adaptive}
+Adam~D Bull.
+\newblock Adaptive-treed bandits.
+\newblock {\em arXiv preprint arXiv:1302.2489}, 2013.
+
+\bibitem{grill2015black}
+Jean-Bastien Grill, Michal Valko, and R{\'e}mi Munos.
+\newblock Black-box optimization of noisy functions with unknown smoothness.
+\newblock In {\em Neural Information Processing Systems}, 2015.
+
+\bibitem{valko2013stochastic}
+Michal Valko, Alexandra Carpentier, and R{\'e}mi Munos.
+\newblock Stochastic simultaneous optimistic optimization.
+\newblock In {\em Proceedings of the 30th International Conference on Machine
+  Learning (ICML-13)}, pages 19--27, 2013.
+
+\end{thebibliography}
