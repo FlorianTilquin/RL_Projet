@@ -9,7 +9,7 @@
 \usepackage{mathrsfs}
 \usepackage{fancyhdr}
 \usepackage{color}
-\usepackage{algorithmicx}
+\usepackage{algorithm,algorithmicx,algpseudocode}
 \newtheorem{mydef}{Definition}
 
 \begin{document}
@@ -41,9 +41,12 @@ In \textit{noisy global optimization}, we wish to maximize a continuous function
 We want to optimize complex systems such as \textit{black-box} systems where the simple evaluation of the function is noisy and very costly, and the derivatives along each parameters are totaly unknown (think of deep networks ?). Due to the high computational cost of evaluating the function (hours, days\dots) we only dispose of a finite budget of evaluation $n$. \\
 Thus we adopt a bandit approach in which the action at each step $t$ is $x_t \in \mathcal{D}_f$ and the reward is a noisy evaluation of our function : $r_t = f(x_t) +\epsilon_t$, with $\epsilon_t$ a bounded noise such that $\mathds{E}[\epsilon_t|x_t] = 0$. After $n$ evaluations, the algorithm outputs its best guess $x(n)$\\
 Regret : $R_n = \sup f(x) - f(x(n))$
-
+Uses HOO as a subroutine
 \paragraph{hypothesis}
-$\exists x^* / f(x^*) = \sup f(x)$, and $f$does not decrease arround $x^*$ faster than a known rate (local smoothness property).
+$\exists x^* / f(x^*) = \sup f(x)$, and $f$does not decrease arround $x^*$ faster than a known rate (local smoothness property) :$f(x)-f(x^*)\leq l(x,x^*)$ where $l$ is a semi-norm. Hierarchical partinioning assumption : 
+\begin{equation*}
+	\exists \nu >0, \ \rho \in [0,1]/ \ \forall h > 0, \ \forall x \in \mathscr{P}_{h,i^*_h}, 
+\end{equation*}<++>
 \paragraph{Properties}
 
 \end{document}
