@@ -36,4 +36,14 @@ In \textit{noisy global optimization}, we wish to maximize a continuous function
 \paragraph{Properties}
 
 
+\section{Parallel Optimistic Optimization}
+\paragraph{Idea}
+We want to optimize complex systems such as \textit{black-box} systems where the simple evaluation of the function is noisy and very costly, and the derivatives along each parameters are totaly unknown (think of deep networks ?). Due to the high computational cost of evaluating the function (hours, days\dots) we only dispose of a finite budget of evaluation $n$. \\
+Thus we adopt a bandit approach in which the action at each step $t$ is $x_t \in \mathcal{D}_f$ and the reward is a noisy evaluation of our function : $r_t = f(x_t) +\epsilon_t$, with $\epsilon_t$ a bounded noise such that $\mathds{E}[\epsilon_t|x_t] = 0$. After $n$ evaluations, the algorithm outputs its best guess $x(n)$\\
+Regret : $R_n = \sup f(x) - f(x(n))$
+
+\paragraph{hypothesis}
+$\exists x^* / f(x^*) = \sup f(x)$, and $f$does not decrease arround $x^*$ faster than a known rate (local smoothness property).
+\paragraph{Properties}
+
 \end{document}
