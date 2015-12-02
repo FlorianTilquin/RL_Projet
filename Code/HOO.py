@@ -20,10 +20,10 @@ def HOO(f,Df,nu,rho,P)
 				Z = rd.randint(2)
 				h,i = h+1,2*i-Z
 			P.append((h,i))
-		[a,b] = P[h,i]	## Checker que notre partiotionning est sous forme de segments.
+		[a,b] = P[h,i]	## Checker que notre partitionning est sous forme de segments.
 		X = a + (b-a)*rd.rand()
 		Y = f(X)
-		T.append((h,i)
+		T.append((h,i))
 		for (h,i) in P:
 			T[h,i] += 1
 			mu[h,i] = (1-1./T[h,i])*mu[h,i] + Y/T[h,i]
