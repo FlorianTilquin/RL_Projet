@@ -6,6 +6,7 @@ from time import time as ti
 import matplotlib.pyplot as plt
 #from ATB import ATB
 from HOO import HOO
+from POO import POO
 
 # Parameters
 eps = 0.05
@@ -45,7 +46,9 @@ function = grill
 #plt.plot(xmc,ymc,'bo')
 #plt.show()
 
-T,N,mu = HOO(function, 1.0, 0.5, t)
+sm = POO(function,1000, 2,	0.9, 1.2)
+print sm
+T,mu = HOO(function, 1.0, 0.5, 100)
 
 #Ab = [(2*i-1)/2.**(h+1) for [h,i] in T]
 #for x in Ab:

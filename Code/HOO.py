@@ -6,14 +6,8 @@ import numpy.random as rd
 import scipy.linalg as ln
 
 def HOO(f,nu,rho,Nev):
-	#T = [[0,1]]
-	#N = [1]
-	#mu = [-0.5]
-	#B = [[np.inf,np.inf]]
-	#U = [0.]
 	T,N,mu,B,U = [],[],[],[],[]
 	for n in range(1,Nev+1):
-		print( str(n)+" evaluations de la fonction effectuees" )
 		P = [[0,1]]
 		h,i = 0,1
 		while [h,i] in T:
@@ -49,11 +43,8 @@ def HOO(f,nu,rho,Nev):
 		while T1 != [[0,1]] :
 			[h,i] = T1[-1]
 			hp,ip = h-1,int((i+1)/2)
-			#print T
-			#print P
-			#print h,i
 			ind = T.index([hp,ip]) #Il faut recuperer l'indice du parent, vu que B[ind(h,i)] contient les b-valeurs des enfants de (h,i)
 			gd = 2*ip-i # C'est la branche de gauche ou droite ?gauche : i =2*ip, droite: i = 2*ip-1
 			B[ind][gd] = np.min([U[ind],np.max(B[ind])])
 			T1.remove([h,i])
-	return T,N,mu # En fait il est obtenu ou le max ??
+	return T,mu # En fait le max est obtenue en x qui maximise mu
