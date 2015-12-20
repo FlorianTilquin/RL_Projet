@@ -2,33 +2,19 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import numpy.random as rd
-import matplotlib.pyplot as plt
 
-##PARAMETERS###################################################################
-eps = 0.05
-gamma = 2.0-10**-1 ##must be smaller than 2 !!
-p = 1.0
-v = 8*np.sqrt((2./gamma)*np.log2(2./gamma))
-tau = 4./eps
-q = 1.0
-depth = 10
+
 Tmax = 200
 noise = 0.0
+q = 1.0
+gamma = 2.0-10**-1
+v = 8*np.sqrt((2./gamma)*np.log2(2./gamma))
+p = 1.0
+depth = 10
+eps = 0.05
+tau = eps/4.
 
-##FUNCTIONS TO OPTIMIZE########################################################
-def sqr(x):
-    return -(x-0.5)**2
-
-def xsin(x):
-    return x*np.sin(2*np.pi*x)
-
-def grill(x):
-	u = np.abs(x-0.5)
-	v = np.sqrt(u)
-	s = 1.0-np.floor(2*( np.log2(u)-np.floor(np.log2(u)) ))
-	return s*(v-u**2)-v
-
-##ALGORITHM####################################################################
+# Algorithm
 def dyadiqueTree(depth):
     return np.arange(2**depth-1)+1
 
@@ -49,6 +35,12 @@ def smallest_box(x,Tree):
     N = np.floor(np.log2(Tree[-1]))+1
     k = np.ceil(2**(N-1)*x)
     return Tree[2**(N-1)+k-2]
+
+def rt(n,B):
+	tau = eps/4.
+	d = depth-np.floor(np.log2(B))
+	ro = q**(p*(d+1))
+	return 2*np.sqrt(np.log(ro*(tau+n))/n)
 
 def ATB(f,depth,eps,gamma):
 	Tree = dyadiqueTree(depth)
@@ -80,11 +72,6 @@ def ATB(f,depth,eps,gamma):
 	xmax,ymax = Y[agm,0],Y[agm,1]
 	return xmax,ymax
 
-def rt(n,B):
-	d = depth-np.floor(np.log2(B))
-	ro = q**(p*(d+1))
-	return 2*np.sqrt(np.log(ro*(tau+n))/n)
-
 def W(B,mu,r):
     if(type(B)==int):
         B = [B]
@@ -111,21 +98,3 @@ def set_proper(A,n,mu,r):
 			A.append(2*b)
 			A.append(2*b+1)
     return A
-
-##RESULTS DISPLAY##############################################################
-function = grill
-x = np.linspace(0,1,100)
-y = function(x)
-
-plt.figure(1)
-plt.plot(x,y)
-plt.plot(x[np.argmax(y)],np.max(y),'ro')
-MC,xmc,ymc = 5,0,-np.inf
-
-for i in range(MC):
-    xs,ys = ATB(function,depth,eps,gamma)
-    if(ys>ymc):
-        xmc=xs
-        ymc=ys
-plt.plot(xmc,ymc,'bo')
-plt.show()
