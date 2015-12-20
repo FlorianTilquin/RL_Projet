@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import numpy.random as rd
+from time import time as ti
 import matplotlib.pyplot as plt
-from ATB import ATB
+#from ATB import ATB
 from HOO import HOO
 
 # Parameters
@@ -24,15 +25,16 @@ def grill(x):
 	s = 1.0-np.floor(2*( np.log2(u)-np.floor(np.log2(u)) ))
 	return s*(v-u**2)-v
 
-## Results display
+# Results display
+#function = lambda x: (np.sin(13*x)*np.sin(27*x)+1.)*0.5
 function = grill
 # ATB
-x = np.linspace(0,1,100)
-y = function(x)
-
-plt.figure(1)
-plt.plot(x,y)
-plt.plot(x[np.argmax(y)],np.max(y),'ro')
+# x = np.linspace(0,1,10000)
+# y = function(x)
+# 
+# plt.figure(1)
+# plt.plot(x,y)
+# plt.plot(x[np.argmax(y)],np.max(y),'ro')
 #MC,xmc,ymc = 5,0,-np.inf
 #
 #for i in range(MC):
@@ -43,12 +45,13 @@ plt.plot(x[np.argmax(y)],np.max(y),'ro')
 #plt.plot(xmc,ymc,'bo')
 #plt.show()
 
-T,N,mu = HOO(function, 1.0, 0.5, 1000)
-#Ab = [(2*i-1)/2.**(h+1) for [h,i] in T]
-##for x in Ab:
-##	plt.plot([x,x],[-0.7,0],'r')
-plt.show()
-n = np.argmax(mu)
-h,i = T[n]
-Xm= (2*i-1.)/2**(h+1)
+T,N,mu = HOO(function, 1.0, 0.5, t)
 
+#Ab = [(2*i-1)/2.**(h+1) for [h,i] in T]
+#for x in Ab:
+#	plt.plot([x,x],[-0.7,0],'r')
+# plt.show()
+# n = np.argmax(mu)
+# h,i = T[n]
+# Xm = (2*i-1.)/2**(h+1)
+# plt.plot(Xm,function(Xm),'bo')

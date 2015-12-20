@@ -12,8 +12,8 @@ def HOO(f,nu,rho,Nev):
 	#B = [[np.inf,np.inf]]
 	#U = [0.]
 	T,N,mu,B,U = [],[],[],[],[]
-	for n in xrange(1,Nev+1):
-		print str(n)+" evaluations de la fonction effectuees"
+	for n in range(1,Nev+1):
+		print( str(n)+" evaluations de la fonction effectuees" )
 		P = [[0,1]]
 		h,i = 0,1
 		while [h,i] in T:
@@ -40,15 +40,15 @@ def HOO(f,nu,rho,Nev):
 		for [k,l] in P :
 			n_ind = T.index([k,l])
 			N[n_ind] += 1
-			#mu[n_ind] = (1-1./N[n_ind])*mu[n_ind] + Y/N[n_ind]
-		for k in xrange(len(T)) :
+			mu[n_ind] = (1-1./N[n_ind])*mu[n_ind] + Y/N[n_ind]
+		for k in range(len(T)) :
 			h = T[k][0]
 			U[k]= mu[k] + np.sqrt(2*np.log(n)/N[k]) + nu*rho**h
 		B.append( [np.inf,np.inf] )
 		T1 = list(T)
 		while T1 != [[0,1]] :
 			[h,i] = T1[-1]
-			hp,ip = h-1,int(i+1)/2
+			hp,ip = h-1,int((i+1)/2)
 			#print T
 			#print P
 			#print h,i
