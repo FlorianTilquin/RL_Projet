@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 #from ATB import ATB
 from HOO import HOO
 from POO import POO
+from StoSOO import SOO
 
 # Parameters
 eps = 0.05
@@ -27,34 +28,39 @@ def grill(x):
 	return s*(v-u**2)-v
 
 # Results display
-#function = lambda x: (np.sin(13*x)*np.sin(27*x)+1.)*0.5
-function = grill
+f = lambda x: (np.sin(13*x)*np.sin(27*x)+1.)*0.5
+#f = grill
 # ATB
-# x = np.linspace(0,1,10000)
-# y = function(x)
-# 
-# plt.figure(1)
-# plt.plot(x,y)
-# plt.plot(x[np.argmax(y)],np.max(y),'ro')
+x = np.linspace(0,1,10000)
+y = f(x)
+print x[np.argmax(y)]
+
+#plt.figure(1)
+#plt.plot(x,y)
+#plt.plot(x[np.argmax(y)],np.max(y),'ro')
+#plt.show()
 #MC,xmc,ymc = 5,0,-np.inf
 #
 #for i in range(MC):
-#    xs,ys = ATB(function,depth,eps,gamma)
+#    xs,ys = ATB(f,depth,eps,gamma)
 #    if(ys>ymc):
 #        xmc=xs
 #        ymc=ys
 #plt.plot(xmc,ymc,'bo')
 #plt.show()
 
-sm = POO(function,1000, 2,	0.9, 1.2)
-print sm
-T,mu = HOO(function, 1.0, 0.5, 100)
-
-#Ab = [(2*i-1)/2.**(h+1) for [h,i] in T]
-#for x in Ab:
-#	plt.plot([x,x],[-0.7,0],'r')
-# plt.show()
+#sm = POO(f,1000, 2,	0.9, 1.2)
+#T,mu = HOO(f, 1.0, 0.5, 100)
 # n = np.argmax(mu)
 # h,i = T[n]
 # Xm = (2*i-1.)/2**(h+1)
-# plt.plot(Xm,function(Xm),'bo')
+# plt.plot(Xm,f(Xm),'bo')
+
+n = 1000.
+k = int(n/np.log(n)**3)+1
+hmax = int(np.sqrt(n/k))
+delta = np.sqrt(1./n)
+print k, hmax, delta
+xm = SOO(f,n,k+50,hmax,delta)
+print xm
+
