@@ -21,7 +21,7 @@ def POO(f,Nev,K,rhomax,numax):
 			return 0.5*Dmax*np.log(n/np.log(n))
 	while n < Nev :
 		while N >= borne(n)  and n < Nev : # j'ai un doute sur la capacite de python a se rendre compte de la valeur de n en permance, je ferai des tests c'est interessant. au passage note la pertinence du truc si n=0 ou 1...
-			for i in xrange(N) : # on va lancer N HOO sur une grille exponentielle
+			for i in range(N) : # on va lancer N HOO sur une grille exponentielle
 				s = [numax,rhomax**(2.*N/(2*i+1))]# ce que j'appelle "grille exponentielle"
 				S.append(s)
 				NevH = int(float(n)/N)+1
