@@ -2,12 +2,12 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import numpy.random as rd
-from time import time as ti
+import time
 import matplotlib.pyplot as plt
 #from ATB import ATB
 from HOO import HOO
+from HOO2 import HOO2
 from POO import POO
-from DOO import DOO
 from StoSOO import SOO
 
 # Parameters
@@ -34,7 +34,7 @@ f = lambda x: (np.sin(13*x)*np.sin(27*x)+1.)*0.5
 # ATB
 x = np.linspace(0,1,10000)
 y = f(x)
-print x[np.argmax(y)]
+print(x[np.argmax(y)])
 
 #plt.figure(1)
 #plt.plot(x,y)
@@ -50,18 +50,19 @@ print x[np.argmax(y)]
 #plt.plot(xmc,ymc,'bo')
 #plt.show()
 
-#sm = POO(f,1000, 2,	0.9, 1.2)
-#T,mu = HOO(f, 1.0, 0.5, 100)
 # n = np.argmax(mu)
 # h,i = T[n]
 # Xm = (2*i-1.)/2**(h+1)
 # plt.plot(Xm,f(Xm),'bo')
 
-n = 1000
+n = 100
 k = int(n/np.log(n)**3)+1
 hmax = int(np.sqrt(n/k))
 delta = np.sqrt(1./n)
 #xm = SOO(f,n,k+20,hmax,delta)
 #print xm
-T,N,mu,B,U = POO(f,1000,2,0.9,1.)
-print T[np.argmax(mu)]
+a = time.time()
+T,N,mu,B,U,D = POO(f,n,2,0.9,1.)
+b = time.time()
+print(b-a)
+print(T[np.argmax(mu)])
