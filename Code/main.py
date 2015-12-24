@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 #from ATB import ATB
 from HOO import HOO
 from POO import POO
+from DOO import DOO
 from StoSOO import SOO
 
 # Parameters
@@ -56,11 +57,11 @@ print x[np.argmax(y)]
 # Xm = (2*i-1.)/2**(h+1)
 # plt.plot(Xm,f(Xm),'bo')
 
-n = 1000.
+n = 1000
 k = int(n/np.log(n)**3)+1
 hmax = int(np.sqrt(n/k))
 delta = np.sqrt(1./n)
-print k, hmax, delta
-xm = SOO(f,n,k+50,hmax,delta)
-print xm
-
+#xm = SOO(f,n,k+20,hmax,delta)
+#print xm
+T,N,mu,B,U = POO(f,1000,2,0.9,1.)
+print T[np.argmax(mu)]
