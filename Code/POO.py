@@ -12,7 +12,7 @@ def POO(f,Nev,K,rhomax,numax):
 	N = 1 # Nombre de HOO lances
 	S = [[numax,rhomax]] # Parametres des HOO lances
 	MU = [-np.inf]
-	H = [[]]
+	H = [[]] #Stock les HOO
 	k = 0
 	def borne(n) :
 		if n < 2 :
@@ -21,12 +21,12 @@ def POO(f,Nev,K,rhomax,numax):
 			return 0.5*Dmax*np.log(n/np.log(n))
 	while n < Nev :
 		while N >= borne(n)  and n < Nev : # j'ai un doute sur la capacite de python a se rendre compte de la valeur de n en permance, je ferai des tests c'est interessant. au passage note la pertinence du truc si n=0 ou 1...
-			for i in range(N) : # on va lancer N HOO sur une grille exponentielle
+			for i in xrange(N) : # on va lancer N HOO sur une grille exponentielle
 				s = [numax,rhomax**(2.*N/(2*i+1))]# ce que j'appelle "grille exponentielle"
 				S.append(s)
 				NevH = int(float(n)/N)+1
 				H.append( list(HOO(f,s[0],s[1],NevH)) ) # On lance une HOO de n/N evaluations (ce qui en pratique fait pas beaucoup...)
-				MU.append(np.max(H[-1][2])) # la je sais pas trop quoi faire d'aautre que la moyenne... Le meilleur resultat sinon ?alllezz j'essaie
+				MU.append(np.max(H[-1][2])) # On prend le meilleur resultat de cette HOO
 			n = n + N * NevH
 			N = 2*N
 			k = k + NevH

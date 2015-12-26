@@ -6,7 +6,7 @@ import numpy.random as rd
 from time import time as ti
 
 def HOO(f,nu,rho,Nev,T=[],N=[],mu=[],B=[],U=[],D = {}):
-	for n in range(1,Nev+1):
+	for n in xrange(1,Nev+1):
 		P = [[0,1]]
 		h,i = 0,1
 		while [h,i] in T:
@@ -35,7 +35,7 @@ def HOO(f,nu,rho,Nev,T=[],N=[],mu=[],B=[],U=[],D = {}):
 			n_ind = D[str(k)+str(l)]
 			N[n_ind] += 1
 			mu[n_ind] = (1-1./N[n_ind])*mu[n_ind] + Y/N[n_ind]
-		for k in range(len(T)) :
+		for k in xrange(len(T)) :
 			h = T[k][0]
 			U[k]= mu[k] + np.sqrt(2*np.log(n)/N[k]) + nu*rho**h
 		B.append( [np.inf,np.inf] )

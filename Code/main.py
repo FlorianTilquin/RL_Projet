@@ -6,7 +6,6 @@ import time
 import matplotlib.pyplot as plt
 #from ATB import ATB
 from HOO import HOO
-from HOO2 import HOO2
 from POO import POO
 from StoSOO import SOO
 
@@ -35,6 +34,8 @@ f = lambda x: (np.sin(13*x)*np.sin(27*x)+1.)*0.5
 x = np.linspace(0,1,10000)
 y = f(x)
 print(x[np.argmax(y)])
+noise = 0.1
+g = lambda x: f(x) + rd.randn()*noise
 
 #plt.figure(1)
 #plt.plot(x,y)
@@ -55,14 +56,16 @@ print(x[np.argmax(y)])
 # Xm = (2*i-1.)/2**(h+1)
 # plt.plot(Xm,f(Xm),'bo')
 
-n = 100
+n = 10000
 k = int(n/np.log(n)**3)+1
 hmax = int(np.sqrt(n/k))
 delta = np.sqrt(1./n)
-#xm = SOO(f,n,k+20,hmax,delta)
-#print xm
-a = time.time()
-T,N,mu,B,U,D = POO(f,n,2,0.9,1.)
-b = time.time()
-print(b-a)
-print(T[np.argmax(mu)])
+xm = SOO(g,n,k*3,hmax,delta)
+print xm
+## POO
+#a = time.time()
+#T,N,mu,B,U,D = POO(f,n,2,0.9,1.)
+#b = time.time()
+#print b-a
+#[hm,im] = T[np.argmax(mu)]
+#print (2*im-1.)/2**(hm+1)
