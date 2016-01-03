@@ -1,4 +1,4 @@
-\documentclass[a4paper,11pt,titlepage]{article}
+\documentclass[a4paper,10pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
@@ -10,10 +10,85 @@
 \usepackage{fancyhdr}
 \usepackage{color}
 \usepackage{algorithmicx}
+\usepackage{graphicx}
 \newtheorem{mydef}{Definition}
 
 \begin{document}
-\section{Random shit}
+
+\title{MVA Reinforcement Learning\\
+Optimization of very difficult functions}
+
+\author{Nathan de Lara, Florian Tilquin}
+%\date{}
+\maketitle
+
+\section{Introduction}
+\subsection{Problem statement}
+The goal of this paper is to test and compare recently developed algorithms for the optimization of \textit{very difficult functions}. This work is based on the papers by Bubeck~\cite{bubeck2011x}, Grill~\cite{grill2015black}, Lazaric~\cite{azar2014online}, Bull~\cite{bull2013adaptive} and Valko~\cite{valko2013stochastic}. Each one of this paper has a specific definition of \textit{difficult} but the general idea is that the function to optimize has many local maxima and only one global maximum, it has very fast variations and is not necessarily differentiable such that a gradient-based approach to find the optimum should not be successful. All functions are assumed to be bounded and to have a compact support which, up to scaling can be fixed to be $[0,1]$. In the end, the general formulation of the problem is:
+\begin{equation}
+\mbox{maximize } f(x) \mbox{ for } x\in [0,1]
+\end{equation}
+
+\subsection{About the multi-armed bandit}
+As previously mentioned, a gradient-based approach is not likely to perform well on the considered functions. Thus, the idea is to use a multi-armed bandit with theoretically an infinite number of arms.
+
+\subsection{Background}
+
+\section{Algorithms}
+\label{algo}
+In this section, we list the algorithms to be compared and briefly present their respective behaviors.
+\subsection{Hierarchical Optimistic Optimization}
+
+\subsection{Parallel Optimistic Optimization}
+
+\subsection{High-Confidence Tree}
+
+\subsection{Stochastic Simultaneous Optimistic Optimization}
+
+\subsection{Adaptive-Treed Bandits}
+
+\section{Results}
+\subsection{Experimental Setup}
+\paragraph{Objective functions}
+We test the algorithms on different reference functions from~\cite{valko2013stochastic} and~\cite{grill2015black}:
+\begin{enumerate}
+\item Two-sine product function: $f_1(x) = \frac{1}{2} (\sin(13x) . \sin(27x))+0.5$.
+\item Garland function: $f_2(x) = 4x(1-x).(\frac{3}{4}+\frac{1}{4}(1-\sqrt{|\sin(60x)|}))$.
+\item Grill function: $f_3(x) = s(\log_2(|x-0.5|).(\sqrt{|x-0.5|}-(x-0.5)^2)-\sqrt{|x-0.5|}$ where $s(x)=\mathbf{1}(x- \lfloor x \rfloor \in [0,0.5])$.
+\end{enumerate}
+The associated plots are displayed in~\ref{functions}.
+\begin{figure}
+\label{functions}
+\centering
+\textbf{Reference functions to optimize}\\
+\includegraphics[scale=0.19]{sinprod.png}
+\includegraphics[scale=0.19]{graland.png}
+\includegraphics[scale=0.19]{grill.png}
+\caption{From the left to the right: Two-sine product, Garlang, Grill.}
+\end{figure}
+
+\paragraph{Algorithms setup}
+In order to compare the performances of the different algorithms, we set a desired precision $\epsilon$ and a total number of function evaluations $T$ and a number of runs $N$. Then we compute for each and each algorithm run the best value returned $\widehat{x}^*$ and the cumulative regret. The run is considered a success if $|\widehat{x}^*-x^*|\le \epsilon$. The success rates are average cumulative regrets are displayed in~\ref{restab}.
+
+\begin{figure}
+\label{restab}
+\centering
+\textbf{Success rates and average cumulative regrets of the algorithms}
+\begin{tabular}{|l|c|c|c|c|c|c|}
+\hline
+Algorithm & $f_1$ & $f_2$ & $f_3$ & $\bar{R}_1$ & $\bar{R}_2$ & $\bar{R}_3$ \\
+\hline
+HOO & & & & & &\\
+POO & & & & & &\\
+HCT & & & & & &\\
+StoSOO & & & & & &\\
+ATB & & & & & &\\
+\hline
+\end{tabular}
+\caption{These results are obtained for $\epsilon=$, $T=$ and $N=$.}
+\end{figure}
+
+\subsection{Analysis}
 
 \bibliographystyle{plain}
 \bibliography{Biblio}{}
