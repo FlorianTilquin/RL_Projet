@@ -1,0 +1,170 @@
+%% \begin{mygraph}{xmin=0, xmax=1, %
+%%                ymin=0, ymax=1, %
+%%                sizex=2.5, sizey=2.5}%
+%%                {nomx=Axe X, nomy=Axe Y}%
+%%                {0,.5,1}{0,0.25,...,1.05}
+
+%% \graduationX[dashed, blue]{ .78 / $\frac{\pi}{4}$ }{ PARAMETRE TEXT }
+
+%% \begin{mylegend}{x=0.3, y=.9, n=2, t=2.1, scale=.5}
+%%   \newlegend{blue}{Courbe 1}
+%%   \newlegend{red}{Courbe 2}
+%% \end{mylegend}
+
+%% \fillbetweencurve[opacity=.2, blue]{ COURBE 1 }{ COURBE 2 }
+
+%% \end{mygraph}
+
+
+\usepackage{tikz}
+
+
+
+\pgfkeys{
+%
+ /mygraph/.is family, /mygraph,
+ xmin/.estore in = \xn,
+ xmax/.estore in = \xm,
+ ymin/.estore in = \yn,
+ ymax/.estore in = \ym,
+ sizex/.estore in = \xx,
+ sizey/.estore in = \yy,
+ %
+/mygraphb/.is family, /mygraphb,
+ nomx/.estore in = \axex,
+ nomy/.estore in = \axey,
+%
+/mygraphc/.is family, /mygraphc,
+ gradsize/.estore in = \gradsize,
+ gradsize/.default = 0.1,
+ nomydist/.estore in = \axeyd,
+ nomydist/.default = 0.8cm,
+ gradsize, nomydist,                 % NE PAS OUBLIER
+%
+/myleg/.is family, /myleg,
+ x/.estore in = \legendx,
+ y/.estore in = \legendy,
+ n/.estore in = \legendn,
+ t/.estore in = \legendt,
+ scale/.estore in = \legends,
+ scale/.default = 1,
+ scale,
+%
+/mylego/.is family, /mylego,
+size/.estore in = \legendwidth,
+size/.default = 0.4,
+size                                  % NE PAS OUBLIER
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                              %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newenvironment{mygraph}[5][]{%
+\pgfkeys{/mygraph, #2}
+\pgfkeys{/mygraphb, #3}
+\pgfkeys{/mygraphc, #1}
+  \pgfmathsetmacro\dum{\yy/(\ym-\yn)}
+  \pgfmathsetmacro\dumm{\xx/(\xm-\xn)}
+\begin{tikzpicture}[yscale=\dum, xscale=\dumm,font=\sffamily]
+  \pgfmathsetmacro\gradx{\gradsize / \dum}
+  \pgfmathsetmacro\grady{\gradsize / \dumm}
+
+  \foreach \x in {#4}{
+    \draw[very thin, color=black, dotted] (\x,\yn) -- (\x,\ym);
+    \draw (\x,\yn+\gradx) -- (\x,\yn)
+          node[font=\tiny, anchor=north] {\pgfmathprintnumber{\x}};
+  };
+  \foreach \y in {#5}{
+    \draw[very thin, color=black, dotted] (\xn,\y) -- (\xm,\y); 
+    \draw (\xn+\grady,\y) -- (\xn,\y)
+          node[font=\tiny, anchor=east] {\pgfmathprintnumber{\y}};
+  };
+  \draw (\xn,\yn) -- node[font=\scriptsize, below=0.3cm] {\axex} (\xm,\yn);
+  \draw (\xn,\yn) -- node[font=\scriptsize, rotate=90, above=\axeyd, anchor=mid] {\axey} (\xn,\ym);
+  \draw (\xn,\ym) -- (\xm,\ym);
+  \draw (\xm,\yn) -- (\xm,\ym);
+
+  \begin{scope}
+    \clip (\xn,\yn) rectangle (\xm,\ym);
+    %% \draw[dashed] (\xn, 0) -- (\xm, 0);
+    %% \draw[dashed] (0, \yn) -- (0, \ym);
+}{
+  \end{scope}
+\end{tikzpicture}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newenvironment{mylegend}[2][]{
+\pgfkeys{/myleg, #2}
+\pgfkeys{/mylego, #1}
+\begin{scope}[shift={(\legendx,\legendy)}, scale=\legends]
+\pgfmathsetmacro\legendwidth{\legendwidth * (\xm-\xn) / \xx }
+\pgfmathsetmacro\dum{ (0.125 * (\ym-\yn) / \yy) }
+\pgfmathsetmacro\dumm{ - (0.125 * (\xm-\xn) / \xx) }
+\pgfmathsetmacro\legendy{ 0 }
+\coordinate (dum) at (\dumm,\dum);
+\pgfmathsetmacro\dum{ - (\legendn-0.4)*(0.25 * (\ym-\yn) / \yy) }
+\coordinate (dumm) at (\dumm,\dum);
+\pgfmathsetmacro\dumm{\dumm + (\legendt * (\xm-\xn) / \xx) }
+\draw[fill=white, opacity=.8] (dum) -- (dumm) -| (\dumm,\dum) |- (dum);
+}{
+\end{scope}
+%% \pgfmathsetmacro\legendyi{\legendyi + (0.125 * (\ym-\yn) / \yy)  }
+%% \pgfmathsetmacro\legendy{\legendy + (0.1 * (\ym-\yn) / \yy)  }
+%% \pgfmathsetmacro\legendx{\legendx - (0.125 * (\xm-\xn) / \xx)  }
+%% \draw[] (\legendx,\legendyi) -- (\legendx,\legendy) %
+%%                              -| (\legendx + 1,\legendy)
+%%                              |- (\legendx,\legendyi);
+}
+
+\newcommand{\newlegend}[2]{
+\draw[font=\scriptsize, #1] (0,\legendy) -- (\legendwidth,\legendy)	node[right,scale=\legends]{#2};
+\pgfmathsetmacro\legendy{\legendy - (0.25 * (\ym-\yn) / \yy)  }
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newenvironment{outofbox}{%
+  \end{scope}%
+}{%
+  \begin{scope}%
+    \clip (\xn,\yn) rectangle (\xm,\ym);%
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\fillbetweencurve}[3][]{
+\begin{scope}
+\clip (\xn,\yn) -- #2 -- (\xm,\yn) -- cycle;
+\fill[#1] (\xn,\ym) -- #3 -- (\xm,\ym) -- cycle;
+\end{scope}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\graduationX}[3][very thin, color=black, dotted]{
+\end{scope}
+  \foreach \x/\t in {#2}{
+    \draw[#1] (\x,\yn) -- (\x,\ym);
+    \draw (\x,\yn+\gradx) -- (\x,\yn)
+          node[font=\tiny, anchor=north, #3] {\t};
+  };
+\begin{scope}%
+\clip (\xn,\yn) rectangle (\xm,\ym);%
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\graduationY}[3][very thin, color=black, dotted]{
+\end{scope}
+  \foreach \y/\t in {#2}{
+    \draw[#1] (\xn,\y) -- (\xm,\y);
+    \draw (\xn+\grady,\y) -- (\xn,\y)
+          node[anchor=east, font=\tiny, shift={(-0*\grady,0)}, #3] {\t};
+  };
+\begin{scope}%
+\clip (\xn,\yn) rectangle (\xm,\ym);%
+}
