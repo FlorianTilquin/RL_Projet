@@ -1,17 +1,18 @@
 \documentclass[a4paper,10pt]{article}
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage{lmodern}
-\usepackage[english]{babel}
-\usepackage{amsmath, amsfonts, amssymb, amsthm, dsfont}
+\usepackage{dsfont}
 \usepackage{bbold}
 \usepackage{stmaryrd}
 \usepackage{mathrsfs}
 \usepackage{fancyhdr}
-\usepackage{color}
-\usepackage{algorithmicx}
+\usepackage{algorithm,algpseudocode}
 \usepackage{graphicx}
-\newtheorem{mydef}{Definition}
+\input{zMC.tex}
+\input{zMCgraphe.tex}
+\zzpackages[english]
+
+\tikzset{
+zplot/.style={opacity=.8}
+}
 
 \begin{document}
 
@@ -68,7 +69,34 @@ We test the algorithms on different reference functions from~\cite{valko2013stoc
 \item Garland function: $f_2(x) = 4x(1-x).(\frac{3}{4}+\frac{1}{4}(1-\sqrt{|\sin(60x)|}))$.
 \item Grill function: $f_3(x) = s(\log_2(|x-0.5|).(\sqrt{|x-0.5|}-(x-0.5)^2)-\sqrt{|x-0.5|}$ where $s(x)=\mathbf{1}(x- \lfloor x \rfloor \in [0,0.5])$.
 \end{enumerate}
-The associated plots are displayed in~\ref{functions}.
+The associated plots are displayed in \ref{fig:functions}.
+
+\begin{figure}
+\label{fig:functions}
+\hbox{\hspace{-3.4cm}\begin{mygraph}{xmin=0, xmax=1, %
+                ymin=0, ymax=1, %
+                sizex=5, sizey=5}%
+                {nomx=zbra, nomy=zbra}%
+                {0,0.25,...,1}{0,0.25,...,1}
+  \draw[zplot, blue] plot file {Prodsin};
+\end{mygraph}\hspace{-1cm}
+\begin{mygraph}{xmin=0, xmax=1, %
+                ymin=0, ymax=1, %
+                sizex=5, sizey=5}%
+                {nomx=zbra, nomy=zbra}%
+                {0,0.25,...,1}{0,0.25,...,1}
+  \draw[zplot, blue] plot file {Garland};
+\end{mygraph}\hspace{-1cm}
+\begin{mygraph}{xmin=0, xmax=1, %
+                ymin=-0.75, ymax=0.25, %
+                sizex=5, sizey=5}%
+                {nomx=zbra, nomy=zbra}%
+                {0,0.25,...,1}{-0.75,-0.5,...,0.25}
+  \draw[zplot, blue] plot file {Grill};
+\end{mygraph}\hss}
+\caption{From the left to the right: Two-sine product, Garlang, Grill.}
+\end{figure}
+
 \begin{figure}
 \label{functions}
 \centering
@@ -102,6 +130,177 @@ ATB & & & & & &\\
 
 \subsection{Analysis}
 
+%%%%%%%%% ANNEXES %%%%%%%
+\appendix
+\section{S'more random shit in the appendix}
+\subsection{HOO}
+\begin{algorithm}[!Htop]
+	\small
+\caption{the hierarchical optimistic optimization algorithm}
+\begin{algorithmic}[1]
+	\For{n = 1 .. Nev}
+		\State $P \gets {[0,1]}$
+		\State $h,i\gets 0,1$
+		\While{$[h,i] \in \mathcal{T}$}
+			\If{$B_{h+1,2i-1} >B_{h+1,2i}$}
+				\State $h,i \gets h+1,2i-1 $
+			\ElsIf{$B_{h+1,2i-1} <B_{h+1,2i}$}
+				\State $h,i \gets h+1,2i $
+			\Else
+				\State $Z \sim Ber(0.5)$
+				\State $h,i \gets h+1,2i-Z$
+			\EndIf
+			\State $P \gets P \cup {[h,i]}$
+		\EndWhile
+		\State $H,I \gets h,i$
+		\State $X \sim \mathcal{U}(\mathcal{P}_{H,I})$
+		\State reward: $Y = f(X)$
+		\State $\mathcal{T} \gets \mathcal{T} \cup {[H,I]}$
+		\ForAll{$[h,i] \in P$}
+			\State $T_{h,i} \gets T_{h,i}+1$
+			\begin{large}
+			\State $\mu_{h,i}\gets (1-\frac{1}{T_{h,i}})\mu_{h,i}+\frac{Y}{T_{h,i}}$
+			\end{large}
+		\EndFor
+		\ForAll{$[h,i] \in \mathcal{T}$}
+			\State $U_{h,i}\gets \mu_{h,i}+\sqrt{\frac{2\ln n}{T_{h,i}}}+\mu_1 \rho^h$
+		\EndFor
+		\State $B_{H+1,2I-1},B_{H+1,2I} \gets +\infty,+\infty$
+		\State $\mathcal{T}' \gets \mathcal{T}$
+		\While{$\mathcal{T}' \neq \{[0,1]\}$}
+			\State $[h,i] \gets \text{Leaf}(\mathcal{T}')$
+			\State $B_{h,i} \gets \min\{U_{h,i},B_{h+1,2i-1},B_{h+1,2i}\}$
+			\State $\mathcal{T}' \gets \mathcal{T}'\{[h,i]\}$
+		\EndWhile
+	\EndFor
+\end{algorithmic}
+\end{algorithm}
+\subsection{POO}
+\begin{algorithm}[!Htop]
+\caption{the hierarchical optimistic optimization algorithm}
+\begin{algorithmic}[1]
+	\For{n = 1 .. Nev}
+		\State $P \gets {[0,1]}$
+		\State $h,i\gets 0,1$
+		\While{$[h,i] \in \mathcal{T}$}
+			\If{$B_{h+1,2i-1} >B_{h+1,2i}$}
+				\State $h,i \gets h+1,2i-1 $
+			\ElsIf{$B_{h+1,2i-1} <B_{h+1,2i}$}
+				\State $h,i \gets h+1,2i $
+			\Else
+				\State $Z \sim Ber(0.5)$
+				\State $h,i \gets h+1,2i-Z$
+			\EndIf
+			\State $P \gets P \cup {[h,i]}$
+		\EndWhile
+		\State $H,I \gets h,i$
+		\State $X \sim \mathcal{U}(\mathcal{P}_{H,I})$
+		\State reward: $Y = f(X)$
+		\State $\mathcal{T} \gets \mathcal{T} \cup {[H,I]}$
+		\ForAll{$[h,i] \in P$}
+			\State $T_{h,i} \gets T_{h,i}+1$
+			\begin{large}
+			\State $\mu_{h,i}\gets (1-\frac{1}{T_{h,i}})\mu_{h,i}+\frac{Y}{T_{h,i}}$
+			\end{large}
+		\EndFor
+		\ForAll{$[h,i] \in \mathcal{T}$}
+			\State $U_{h,i}\gets \mu_{h,i}+\sqrt{\frac{2\ln n}{T_{h,i}}}+\mu_1 \rho^h$
+		\EndFor
+		\State $B_{H+1,2I-1},B_{H+1,2I} \gets +\infty,+\infty$
+		\State $\mathcal{T}' \gets \mathcal{T}$
+		\While{$\mathcal{T}' \neq \{[0,1]\}$}
+			\State $[h,i] \gets \text{Leaf}(\mathcal{T}')$
+			\State $B_{h,i} \gets \min\{U_{h,i},B_{h+1,2i-1},B_{h+1,2i}\}$
+			\State $\mathcal{T}' \gets \mathcal{T}'\{[h,i]\}$
+		\EndWhile
+	\EndFor
+\end{algorithmic}
+\end{algorithm}
+\subsection{SOO}
+\begin{algorithm}[!ht]
+\caption{the hierarchical optimistic optimization algorithm}
+\begin{algorithmic}[1]
+	\For{n = 1 .. Nev}
+		\State $P \gets {[0,1]}$
+		\State $h,i\gets 0,1$
+		\While{$[h,i] \in \mathcal{T}$}
+			\If{$B_{h+1,2i-1} >B_{h+1,2i}$}
+				\State $h,i \gets h+1,2i-1 $
+			\ElsIf{$B_{h+1,2i-1} <B_{h+1,2i}$}
+				\State $h,i \gets h+1,2i $
+			\Else
+				\State $Z \sim Ber(0.5)$
+				\State $h,i \gets h+1,2i-Z$
+			\EndIf
+			\State $P \gets P \cup {[h,i]}$
+		\EndWhile
+		\State $H,I \gets h,i$
+		\State $X \sim \mathcal{U}(\mathcal{P}_{H,I})$
+		\State reward: $Y = f(X)$
+		\State $\mathcal{T} \gets \mathcal{T} \cup {[H,I]}$
+		\ForAll{$[h,i] \in P$}
+			\State $T_{h,i} \gets T_{h,i}+1$
+			\begin{large}
+			\State $\mu_{h,i}\gets (1-\frac{1}{T_{h,i}})\mu_{h,i}+\frac{Y}{T_{h,i}}$
+			\end{large}
+		\EndFor
+		\ForAll{$[h,i] \in \mathcal{T}$}
+			\State $U_{h,i}\gets \mu_{h,i}+\sqrt{\frac{2\ln n}{T_{h,i}}}+\mu_1 \rho^h$
+		\EndFor
+		\State $B_{H+1,2I-1},B_{H+1,2I} \gets +\infty,+\infty$
+		\State $\mathcal{T}' \gets \mathcal{T}$
+		\While{$\mathcal{T}' \neq \{[0,1]\}$}
+			\State $[h,i] \gets \text{Leaf}(\mathcal{T}')$
+			\State $B_{h,i} \gets \min\{U_{h,i},B_{h+1,2i-1},B_{h+1,2i}\}$
+			\State $\mathcal{T}' \gets \mathcal{T}'\{[h,i]\}$
+		\EndWhile
+	\EndFor
+\end{algorithmic}
+\end{algorithm}
+\subsection{HCT}
+\begin{algorithm}[!ht]
+\caption{the hierarchical optimistic optimization algorithm}
+\begin{algorithmic}[1]
+	\For{n = 1 .. Nev}
+		\State $P \gets {[0,1]}$
+		\State $h,i\gets 0,1$
+		\While{$[h,i] \in \mathcal{T}$}
+			\If{$B_{h+1,2i-1} >B_{h+1,2i}$}
+				\State $h,i \gets h+1,2i-1 $
+			\ElsIf{$B_{h+1,2i-1} <B_{h+1,2i}$}
+				\State $h,i \gets h+1,2i $
+			\Else
+				\State $Z \sim Ber(0.5)$
+				\State $h,i \gets h+1,2i-Z$
+			\EndIf
+			\State $P \gets P \cup {[h,i]}$
+		\EndWhile
+		\State $H,I \gets h,i$
+		\State $X \sim \mathcal{U}(\mathcal{P}_{H,I})$
+		\State reward: $Y = f(X)$
+		\State $\mathcal{T} \gets \mathcal{T} \cup {[H,I]}$
+		\ForAll{$[h,i] \in P$}
+			\State $T_{h,i} \gets T_{h,i}+1$
+			\begin{large}
+			\State $\mu_{h,i}\gets (1-\frac{1}{T_{h,i}})\mu_{h,i}+\frac{Y}{T_{h,i}}$
+			\end{large}
+		\EndFor
+		\ForAll{$[h,i] \in \mathcal{T}$}
+			\State $U_{h,i}\gets \mu_{h,i}+\sqrt{\frac{2\ln n}{T_{h,i}}}+\mu_1 \rho^h$
+		\EndFor
+		\State $B_{H+1,2I-1},B_{H+1,2I} \gets +\infty,+\infty$
+		\State $\mathcal{T}' \gets \mathcal{T}$
+		\While{$\mathcal{T}' \neq \{[0,1]\}$}
+			\State $[h,i] \gets \text{Leaf}(\mathcal{T}')$
+			\State $B_{h,i} \gets \min\{U_{h,i},B_{h+1,2i-1},B_{h+1,2i}\}$
+			\State $\mathcal{T}' \gets \mathcal{T}'\{[h,i]\}$
+		\EndWhile
+	\EndFor
+\end{algorithmic}
+\end{algorithm}
+\subsection{ATB}
+
+%%% BIBILIOGRAPHY %%%%
 \bibliographystyle{plain}
 \bibliography{Biblio}{}
 \nocite{*}
