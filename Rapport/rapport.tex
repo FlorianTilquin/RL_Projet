@@ -41,7 +41,8 @@ In practice, for the algorithms considered, $x_t = \mathcal{U}(I_t)$. This means
 \begin{figure}
 \label{dydtree}
 \centering
-\textbf{A dyadic tree}\\
+\includegraphics[scale=0.3]{dyadic}
+\caption{A dyadic tree from~\cite{bull2013adaptive}}
 \end{figure}
 
 
@@ -55,10 +56,12 @@ In this section, we list the algorithms to be compared and briefly present their
 \subsection{Parallel Optimistic Optimization}
 
 \subsection{High-Confidence Tree}
+This algorithm exists in two different versions: with correlated and uncorrelated feedback. For the purpose of performance comparison with other algorithms, we only consider the uncorrelated feedback here.
 
 \subsection{Stochastic Simultaneous Optimistic Optimization}
 
 \subsection{Adaptive-Treed Bandits}
+For this algorithm, the selection function of the interval has the usual structure: \textit{average reward + confidence radius}. Once the confidence diameter becomes smaller than the actual diameter of the interval, it is split into two knew smaller intervals that can be selected for pulling.
 
 \section{Results}
 \subsection{Experimental Setup}
@@ -78,21 +81,21 @@ The associated plots are displayed in \ref{fig:functions}.
                 sizex=5, sizey=5}%
                 {nomx=zbra, nomy=zbra}%
                 {0,0.25,...,1}{0,0.25,...,1}
-  \draw[zplot, blue] plot file {Data/Prodsin};
+  \draw[zplot, blue] plot file {Data/Prodsin.data};
 \end{mygraph}\hspace{-1cm}
 \begin{mygraph}{xmin=0, xmax=1, %
                 ymin=0, ymax=1, %
                 sizex=5, sizey=5}%
                 {nomx=zbra, nomy=zbra}%
                 {0,0.25,...,1}{0,0.25,...,1}
-  \draw[zplot, blue] plot file {Data/Garland};
+  \draw[zplot, blue] plot file {Data/Garland.data};
 \end{mygraph}\hspace{-1cm}
 \begin{mygraph}{xmin=0, xmax=1, %
                 ymin=-0.75, ymax=0.25, %
                 sizex=5, sizey=5}%
                 {nomx=zbra, nomy=zbra}%
                 {0,0.25,...,1}{-0.75,-0.5,...,0.25}
-  \draw[zplot, blue] plot file {Data/Grill};
+  \draw[zplot, blue] plot file {Data/Grill.data};
 \end{mygraph}\hss}
 \caption{From the left to the right: Two-sine product, Garlang, Grill.}
 \end{figure}
