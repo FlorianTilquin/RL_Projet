@@ -97,16 +97,6 @@ The associated plots are displayed in \ref{fig:functions}.
 \caption{From the left to the right: Two-sine product, Garlang, Grill.}
 \end{figure}
 
-\begin{figure}
-\label{functions}
-\centering
-\textbf{Reference functions to optimize}\\
-\includegraphics[scale=0.19]{sinprod.png}
-\includegraphics[scale=0.19]{graland.png}
-\includegraphics[scale=0.19]{grill.png}
-\caption{From the left to the right: Two-sine product, Garlang, Grill.}
-\end{figure}
-
 \paragraph{Algorithms setup}
 In order to compare the performances of the different algorithms, we set a desired precision $\epsilon$ and a total number of function evaluations $T$ and a number of runs $N$. Then we compute for each and each algorithm run the best value returned $\widehat{x}^*$ and the cumulative regret defined in~\ref{regret}. The run is considered a success if $|\widehat{x}^*-x^*|\le \epsilon$. The success rates are average cumulative regrets are displayed in~\ref{restab}. The tuning of the parameters specific to each algorithm is performed manually.
 
