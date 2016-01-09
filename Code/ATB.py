@@ -42,7 +42,8 @@ def rt(n,B):
 	ro = q**(p*(d+1))
 	return 2*np.sqrt(np.log(ro*(tau+n))/n)
 
-def ATB(f,depth,eps,gamma):
+def ATB(f,depth,eps,gamma,Tmax):
+	REW = []
 	Tree = dyadiqueTree(depth)
 	#print "Tree : ",Tree
 	N = len(Tree)
@@ -57,6 +58,7 @@ def ATB(f,depth,eps,gamma):
 		l,h = interval(B)
 		x = rd.uniform(l,h)
 		y = f(x)+noise*rd.randn()
+		REW.append(y)
 		sB = smallest_box(x,Tree)
 		par = parents(sB,B)
 		# Updates
@@ -70,7 +72,7 @@ def ATB(f,depth,eps,gamma):
 			A = set_proper(A,n,mu,r)
 	agm = np.argmin(Y[:,2])
 	xmax,ymax = Y[agm,0],Y[agm,1]
-	return xmax,ymax
+	return xmax,ymax,REW
 
 def W(B,mu,r):
     if(type(B)==int):

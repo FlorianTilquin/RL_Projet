@@ -48,7 +48,7 @@ def SOO(f,n,k,hmax,delta):
 							MU.append(0)
 							N.append(0)
 						else :
-							MU[im] = -np.inf # Pas ouf de faire ca, mais en theorie c'est la meilleure chose a faire
+							MU[im] = -np.inf
 				bmax = b[im]
 	hm = min(depth,hmax) # on va chercher la profondeur maximale atteinte pour laquelle on a calcule toutes les b-values (il se peut que depth = hmax+1 et dans ce cas les dernieres b-values n'ont pas ete calculees)
 	MUh = [[MU[j],i] for j,[h,i] in enumerate(T) if h == hm] # Je vais prendre le noeud a profondeur hm qui a la plus grosse MU

@@ -43,15 +43,13 @@ def HOO2(f,nu,rho,Nev):
 			n_ind = T.index([k,l])
 			N[n_ind] += 1
 			mu[n_ind] = (1-1./N[n_ind])*mu[n_ind] + Y/N[n_ind]
-		for k in xrange(len(T)) :
-			h = T[k][0]
-			U[k]= mu[k] + np.sqrt(2*np.log(n)/N[k]) + nu*rho**h
+			U[n_ind] = mu[n_ind] + np.sqrt(2*np.log(Nev)/N[n_ind]) + nu*rho**k
 		B.append( [np.inf,np.inf] )
-		T1 = list(T)
-		while T1 != [[0,1]] :
-			[h,i] = T1[-1]
+		P1 = list(P)
+		while P1 != [[0,1]] :
+			[h,i] = P1[-1]
 			hp,ip = h-1,int((i+1)/2)
 			ind = T.index([hp,ip])#Il faut recuperer l'indice du parent, vu que B[ind(h,i)] contient les b-valeurs des enfants de (h,i)
 			B[ind][2*ip-i] = np.min([U[ind],np.max(B[ind])]) # gauche : i = 2*ip, droite: i = 2*ip-1
-			T1.pop()
-	return T,N,mu,Pos,REW # En fait le max est obtenu en x qui maximise mu
+			P1.pop()
+	return T,N,mu,Pos,REW,B # En fait le max est obtenu en x qui maximise mu

@@ -9,7 +9,6 @@ def HOO(f,nu,rho,Nev,T=[[0,1]],N=[],mu=[],B=[],U=[],D = {}):
 	REW = []
 	for n in xrange(1,Nev+1):
 		P = [[0,1]]
-		T = [[0,1]]
 		h,i = 0,1
 		while [h,i] in T:
 			j = D[str(h)+str(i)]
