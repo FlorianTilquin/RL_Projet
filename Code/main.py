@@ -37,12 +37,12 @@ def sinprod(x):
 f = sinprod
 ####################################################
 
-# Theoretical argmax
+#Theoretical argmax
 #g = lambda x:-f(x)
 #Xm = fmin(g,x0 =0.8,xtol = 10**-12)
-#Xm = 0.867526208796
-#Ym = sinprod(Xm)
-#print Xm,Ym
+Xm = 0.867526208796
+Ym = sinprod(Xm)
+print Xm,Ym
 
 ## Brute force
 #x = np.linspace(0,1,100000)
@@ -79,13 +79,13 @@ f = sinprod
 #		REW = R
 #print xmc,ymc
 
-####  HOO  ####
-n = 5000
-T,N,mu,P_HOO,REW_HOO,B = HOO2(f,1.,0.5,n)
-[hm,im] = T[np.argmax(mu)]
-xm = (2*im-1.)/2**(hm+1)
-ym = f(xm)
-print xm,ym
+####  HOO  ####
+#n = 5000
+#T,N,mu,P_HOO,REW_HOO,B = HOO2(f,1.,0.5,n)
+#[hm,im] = T[np.argmax(mu)]
+#xm = (2*im-1.)/2**(hm+1)
+#ym = f(xm)
+#print xm,ym
 
 #L = [(2*i-1.)/2**(h+1) for [h,i] in T]
 #H = [len([h for [h,i] in T if h == t]) for t in range(15)]
@@ -97,54 +97,60 @@ print xm,ym
 
 #### SOO ####
 
-##n = 10000
-##k = int(n/np.log(n)**3)+1
-##hmax = int(np.sqrt(n/k))
-##delta = np.sqrt(1./n)
-##xm = SOO(g,n,k*3,hmax,delta)
-##print xm
+n = 10000
+k = 20#int(n/np.log(n)**3)+1
+hmax = 20#int(np.sqrt(float(n)/k))
+delta = 0.01#np.sqrt(1./n)
+xm, REW_SOO, P_SOO = SOO(f,n,k*3,hmax,delta)
+ym = f(xm)
+print xm, ym
 
 #### HCT_iid ####
 # Parameters
-ro = 0.5
-v1 = 1.0
-c1 = (ro/(3*v1))**(1.0/8)
-c = 2*(ro/(1.0-ro))**(0.5)
-d = 2.
-Tmax = n
-Ym = 1.
+#ro = 0.5
+#v1 = 1.0
+#c1 = (ro/(3*v1))**(1.0/8)
+#c = 2*(ro/(1.0-ro))**(0.5)
+#d = 2.
+#Tmax = n
+#Ym = 1.
 
 ## Algorithm call
-MC,ymc = 1,-np.inf
-
-for i in range(MC):
-	xs,ys,Xs,REWs= HCT(f,v1,ro,c,d,Tmax)
-	print xs,ys
-	if(ys>ymc):
-		xmc=xs
-		ymc=ys
-		P_HCT=Xs
-		REW_HCT = REWs
+#MC,ymc = 1,-np.inf
+#
+#for i in range(MC):
+#	xs,ys,Xs,REWs= HCT(f,v1,ro,c,d,Tmax)
+#	print xs,ys
+#	if(ys>ymc):
+#		xmc=xs
+#		ymc=ys
+#		P_HCT=Xs
+#		REW_HCT = REWs
 u = np.linspace(0,1,10001)
 v = [f(x) for x in u]
 plt.figure(100)
-plt.plot(xmc,ymc,'bo')
+#plt.plot(xmc,ymc,'bo')
 plt.plot(xm,ym,'ro')
 plt.plot(u,v,'-k')
 
 
 plt.figure(1)
-plt.plot(Ym-np.array(REW_HCT),'b+')
-plt.plot(Ym-np.array(REW_HOO),'r+')
-
+#plt.plot(Ym-np.array(REW_HCT),'b+')
+#plt.plot(Ym-np.array(REW_HOO),'r+')
+plt.plot(Ym-np.array(REW_SOO),'g+')
+#
 plt.figure(2)
-plt.plot(P_HCT,'b+')
-plt.plot(P_HOO,'r+')
-
-V_HCT = np.arange(Tmax)*Ym-np.cumsum(REW_HCT)
-V_HOO = np.arange(n+1)*Ym-np.cumsum(REW_HOO)
-
+#plt.plot(P_HCT,'b+')
+#plt.plot(P_HOO,'r+')
+plt.plot(P_SOO,'g+')
+#
+#V_HCT = np.arange(Tmax)*Ym-np.cumsum(REW_HCT)
+#V_HOO = np.arange(n+1)*Ym-np.cumsum(REW_HOO)
+V_SOO = np.arange(len(REW_SOO))*Ym-np.cumsum(REW_SOO)
+#
 plt.figure(3)
-plt.plot(V_HCT,'b+')
-plt.plot(V_HOO,'r+')
+#plt.plot(V_HCT,'b+')
+#plt.plot(V_HOO,'r+')
+plt.plot(V_SOO,'g+')
+
 plt.show()
