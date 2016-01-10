@@ -28,21 +28,22 @@ def grill(x):
 	s = 1.0-np.floor(2*( np.log2(u)-np.floor(np.log2(u)) ))
 	return s*(v-u**2)-v+1
 
-def graland(x):
-	return 4*(1-x)*(0.75+0.25*(1-np.sqrt(np.sin(60*x))))
+def garland(x):
+	return 4*x*(1-x)*(0.75+0.25*(1-np.sqrt(abs(np.sin(60*x)))))
 
 def sinprod(x):
 	return (np.sin(13*x)*np.sin(27*x)+1.)*0.5
 
-f = sinprod
+f = garland
 ####################################################
 
 #Theoretical argmax
 #g = lambda x:-f(x)
 #Xm = fmin(g,x0 =0.8,xtol = 10**-12)
-Xm = 0.867526208796
-Ym = sinprod(Xm)
-print Xm,Ym
+if(f==sinprod):
+    Xm = 0.867526208796
+    Ym = sinprod(Xm)
+    print Xm,Ym
 
 ## Brute force
 #x = np.linspace(0,1,100000)
@@ -65,19 +66,12 @@ print Xm,Ym
 ######### Algorithms application ##################
 ####  ATB ####
 ## Parameters
-#eps = 0.05
-#gamma = 2.0-10**-1 ##must be smaller than 2 !!
-#depth = 10
-#n = 1000
-#MC,xmc,ymc = 5,0,-np.inf
-#
-#for i in range(MC):
-#    xs,ys,R = ATB(f,depth,eps,gamma,n)
-#    if ys > ymc:
-#        #xmc = xs
-#        #ymc = ys
-#		REW = R
-#print xmc,ymc
+eps = 0.001
+gamma = 2.0-10**-1 ##must be smaller than 2 !!
+depth = 15
+n = 1000
+xm,ym,REW_ATB,P_ATB = ATB(f,depth,eps,gamma,n)
+print xm,ym
 
 ####  HOO  ####
 #n = 5000
@@ -97,13 +91,13 @@ print Xm,Ym
 
 #### SOO ####
 
-n = 10000
-k = 20#int(n/np.log(n)**3)+1
-hmax = 20#int(np.sqrt(float(n)/k))
-delta = 0.01#np.sqrt(1./n)
-xm, REW_SOO, P_SOO = SOO(f,n,k*3,hmax,delta)
-ym = f(xm)
-print xm, ym
+#n = 10000
+#k = 20#int(n/np.log(n)**3)+1
+#hmax = 20#int(np.sqrt(float(n)/k))
+#delta = 0.01#np.sqrt(1./n)
+#xm, REW_SOO, P_SOO = SOO(f,n,k*3,hmax,delta)
+#ym = f(xm)
+#print xm, ym
 
 #### HCT_iid ####
 # Parameters
@@ -134,23 +128,32 @@ plt.plot(xm,ym,'ro')
 plt.plot(u,v,'-k')
 
 
+
 plt.figure(1)
-#plt.plot(Ym-np.array(REW_HCT),'b+')
-#plt.plot(Ym-np.array(REW_HOO),'r+')
-plt.plot(Ym-np.array(REW_SOO),'g+')
-#
-plt.figure(2)
+plt.title('Positions')
 #plt.plot(P_HCT,'b+')
 #plt.plot(P_HOO,'r+')
-plt.plot(P_SOO,'g+')
+#plt.plot(P_SOO,'g+')
+#plt.plot(P_ATB,'m+')
+plt.plot(P_ATB,np.arange(len(P_ATB)),'m+')
+
+#
+plt.figure(2)
+plt.title('Marginal regret')
+#plt.plot(Ym-np.array(REW_HCT),'b+')
+#plt.plot(Ym-np.array(REW_HOO),'r+')
+#plt.plot(Ym-np.array(REW_SOO),'g+')
+plt.plot(Ym-np.array(REW_ATB),'m+')
 #
 #V_HCT = np.arange(Tmax)*Ym-np.cumsum(REW_HCT)
 #V_HOO = np.arange(n+1)*Ym-np.cumsum(REW_HOO)
-V_SOO = np.arange(len(REW_SOO))*Ym-np.cumsum(REW_SOO)
+#V_SOO = np.arange(len(REW_SOO))*Ym-np.cumsum(REW_SOO)
+V_ATB = np.arange(len(REW_ATB))*Ym-np.cumsum(REW_ATB)
 #
 plt.figure(3)
+plt.title('Cumulative regret')
 #plt.plot(V_HCT,'b+')
 #plt.plot(V_HOO,'r+')
-plt.plot(V_SOO,'g+')
+plt.plot(V_ATB,'m+')
 
 plt.show()

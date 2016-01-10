@@ -15,88 +15,85 @@ eps = 0.05
 tau = eps/4.
 
 # Algorithm
-def dyadiqueTree(depth):
-    return np.arange(2**depth-1)+1
-
 def interval(i):
-    a = np.floor(np.log2(i))
+    i+=1
+    a = np.floor(np.round(np.log2(i),10))
     b = 2**a
     w = i-b
     return w/(b+0.0),(w+1.0)/(b+0.0)
 
 def parents(i,B):
-    K = np.floor(np.log2(i))+1
-    L = np.floor(np.log2(B))+1
-    prof = K-L+1
-    Den = (np.zeros(prof)+2)**(np.arange(prof))
-    return np.floor((np.zeros(prof)+i)/Den).astype(int)-1
+    if i<B:
+        print "children higher than parent"
+        return np.inf
+    i+=1
+    B+=1
+    par = [i]
+    while(i/2>=B and i>0):
+        par.append(i/2)
+        i/=2
+    return np.array(par)-1
 
-def smallest_box(x,Tree):
-    N = np.floor(np.log2(Tree[-1]))+1
-    k = np.ceil(2**(N-1)*x)
-    return Tree[2**(N-1)+k-2]
-
+def smallest_box(x,d):
+    k = np.floor(2**(d-1)*x)
+    sb = (2**(d-1)+k-1).astype(int)
+    if sb<2**d:
+        return sb
+    else:
+        print "box too small"
+    
 def rt(n,B):
-	tau = eps/4.
-	d = depth-np.floor(np.log2(B))
-	ro = q**(p*(d+1))
-	return 2*np.sqrt(np.log(ro*(tau+n))/n)
+    tau = eps/4.
+    d = depth-np.floor(np.log2(B+1))
+    ro = q**(p*(d+1))
+    return 2*np.sqrt(np.log(ro*(tau+n))/n)
 
 def ATB(f,depth,eps,gamma,Tmax):
-	REW = []
-	Tree = dyadiqueTree(depth)
-	#print "Tree : ",Tree
-	N = len(Tree)
-	mu = np.zeros(N)
-	n = np.zeros(N)
-	r = np.zeros(N)+np.inf
-	I = np.zeros(N)+np.inf
-	Y = np.zeros([Tmax,3])
-	A = [1]
-	for t in np.arange(Tmax):
-		B = A[np.argmax(I[np.array(A)-1])]
-		l,h = interval(B)
-		x = rd.uniform(l,h)
-		y = f(x)+noise*rd.randn()
-		REW.append(y)
-		sB = smallest_box(x,Tree)
-		par = parents(sB,B)
-		# Updates
-		n[par] +=1
-		mu[par]=(mu[par]*(n[par]-1)+y)/n[par]
-		r[par] = rt(n[par],par)
-		I = mu+(1+2*p*v)*r
-		Y[t,0],Y[t,1] = x,y
-		Y[t,2] = rt(n[B-1],B)
-		if(np.min(n[np.array(A)-1])>0):
-			A = set_proper(A,n,mu,r)
-	agm = np.argmin(Y[:,2])
-	xmax,ymax = Y[agm,0],Y[agm,1]
-	return xmax,ymax,REW
+    REW = []
+    POS = []
+    N = 2**depth-1
+    mu = np.zeros(N)
+    n = np.zeros(N)
+    r = np.zeros(N)+np.inf
+    I = np.zeros(N)+np.inf
+    Y = np.zeros(Tmax)
+    A = [0]
+    for t in np.arange(Tmax):
+        B = I.tolist().index(np.max(I[A]))
+        l,h = interval(B)
+        x = rd.uniform(l,h)
+        y = f(x)+noise*rd.randn()
+        POS.append(x)
+        REW.append(y)
+        sB = smallest_box(x,depth)
+        par = parents(sB,B)
+        # Updates
+        n[par] +=1
+        mu[par]=(mu[par]*(n[par]-1)+y)/n[par]
+        r[par] = rt(n[par],par)
+        I = mu+(1+2*p*v)*r
+        Y[t] = rt(n[B],B)
+        if(np.min(n[A])>0):
+            A = set_proper(A,n,mu,r)
+    agm = np.argmin(Y)
+    xmax,ymax = POS[np.argmax(REW)],np.max(REW)
+    return xmax,ymax,REW,POS
 
-def W(B,mu,r):
-    if(type(B)==int):
-        B = [B]
-        W = np.zeros(1)
-    else:
-        W = np.zeros(len(B))
-    t=0
-    for b in B:
-        if(np.floor(np.log2(b))+1<depth):
-            b = b-1
-            Lg = mu[2*b]-r[2*b]
-            Ug = mu[2*b]+r[2*b]
-            Lr = mu[2*b+1]-r[2*b+1]
-            Ur = mu[2*b+1]+r[2*b+1]
-            D = np.array([Lg-Ug,Lg-Ur,Lr-Ur,Lr-Ug])
-            W[t]=np.max(-D)##minus sign added by myself contrary to the paper ### rageux va
-        t+=1
+def W(b,mu,r):
+    W = -np.inf
+    if(np.floor(np.log2(b+1))+1<depth):
+        b = b
+        Lg = mu[2*b]-r[2*b]
+        Ug = mu[2*b]+r[2*b]
+        Lr = mu[2*b+1]-r[2*b+1]
+        Ur = mu[2*b+1]+r[2*b+1]
+        D = np.array([Lg-Ug,Lg-Ur,Lr-Ur,Lr-Ug])
+        W=np.max(-D)##minus sign added by myself contrary to the paper ### rageux va
     return W
 
 def set_proper(A,n,mu,r):
-    for b in A:
-		if np.min(v*r[b-1]-W(b,mu,r)) <= 0 :
-			A.remove(b)
-			A.append(2*b)
-			A.append(2*b+1)
+    for b in [B for B in A if v*r[B]-W(B,mu,r) <= 0]:
+            A.remove(b)
+            A.append(2*(b+1))
+            A.append(2*b+1)
     return A
