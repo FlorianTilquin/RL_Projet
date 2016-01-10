@@ -1,40 +1,22 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
-import numpy as np
+
 import numpy.random as rd
-import time
 import matplotlib.pyplot as plt
-from scipy.optimize import fmin
-from ATB import ATB
-from HOO import HOO
-from HOO2 import HOO2
-from POO import POO
-from HCT_iid import HCT
-from StoSOO import SOO
+#from scipy.optimize import fmin
+from time import time as ti
+from fonctions import *
+from algos import *
+#from ATB import ATB
+#from HOO import HOO
+#from HOO2 import HOO2
+#from POO import POO
+#from HCT_iid import HCT
+#from StoSOO import SOO
 
 
-########## Functions to optimize ###################
-def sqr(x):
-    return -(x-0.5)**2
 
-def xsin(x):
-    return x*np.sin(2*np.pi*x)
-
-def grill(x):
-	if x == 0.5:
-		return 1.
-	u = np.abs(x-0.5)
-	v = np.sqrt(u)
-	s = 1.0-np.floor(2*( np.log2(u)-np.floor(np.log2(u)) ))
-	return s*(v-u**2)-v+1
-
-def garland(x):
-	return 4*x*(1-x)*(0.75+0.25*(1-np.sqrt(abs(np.sin(60*x)))))
-
-def sinprod(x):
-	return (np.sin(13*x)*np.sin(27*x)+1.)*0.5
-
-f = garland
+f = sinprod
 ####################################################
 
 #Theoretical argmax
@@ -66,11 +48,12 @@ if(f==sinprod):
 ######### Algorithms application ##################
 ####  ATB ####
 ## Parameters
-eps = 0.001
+noise = 0.
+eps = 0.00001
 gamma = 2.0-10**-1 ##must be smaller than 2 !!
 depth = 15
 n = 1000
-xm,ym,REW_ATB,P_ATB = ATB(f,depth,eps,gamma,n)
+xm,ym,REW_ATB,P_ATB = ATB(f,n,depth,eps,gamma,noise)
 print xm,ym
 
 ####  HOO  ####
@@ -134,7 +117,6 @@ plt.title('Positions')
 #plt.plot(P_HCT,'b+')
 #plt.plot(P_HOO,'r+')
 #plt.plot(P_SOO,'g+')
-#plt.plot(P_ATB,'m+')
 plt.plot(P_ATB,np.arange(len(P_ATB)),'m+')
 
 #

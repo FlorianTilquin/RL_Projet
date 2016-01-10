@@ -10,7 +10,7 @@ def rew(f,node) :
     X = alpha + (beta-alpha)*rd.rand()
     rew = f(X) # On prend un X dans la boite correspondante et on tire le bras
     return rew,X
-    
+
 def SOO(f,n,k,hmax,delta):
     T = [[0,1]]    #Initialisation classique
     t = 0 # Nombre d'evaluataions de la fonction effectuees
