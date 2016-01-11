@@ -8,7 +8,7 @@ from HOO import HOO
 
 def POO(f,Nev,K,rhomax,numax):
 	Dmax = np.log(K)/np.log(1./rhomax)
-	n = 0 # Nombre d'evaluations de la fonction. Faut pas mettre 0 sinon ca tourne a l'infini et j'ai la flemme de faire un truc qui corrige cette connerie
+	n = 0
 	N = 1 # Nombre de HOO lances
 	S = [[numax,rhomax]] # Parametres des HOO lances
 	MU = [-np.inf]
@@ -22,14 +22,19 @@ def POO(f,Nev,K,rhomax,numax):
 			return (N >= b)*(N <= 2*b)
 	while n < Nev :
 		print n,N
+		#print "cond", condition(n,n)
 		while condition(N,n) and n < Nev :
 			for i in xrange(N) :
 				s = [numax,rhomax**(2.*N/(2*i+1))]
 				s = [numax,0.5]
 				S.append(s)
 				NevH = int(float(n)/N)+1
-				dum = list(HOO(f,s[0],s[1],NevH))
-				H.append( dum ) # On lance une HOO de n/N evaluations (ce qui en pratique fait pas beaucoup...)
+				dum = None
+				#print "Nev",NevH
+				#print NevH
+				dum = list(HOO(f,s[0],s[1],NevH,T=[],N=[],mu=[],B=[],U=[],D={},Pos=[],REW=[])) # On lance une HOO de n/N evaluations
+				H.append( dum )
+				#print "H",len(dum[2]),len(H)
 				MU.append(np.max(dum[2])) # On prend le meilleur resultat de cette HOO
 			n = n + N * NevH
 			N = 2*N
@@ -42,4 +47,5 @@ def POO(f,Nev,K,rhomax,numax):
 		k = k+1
 		sm = np.argmax(MU)
 		#print "s,S[s]:",sm,S[sm]
-	return H#list(H[sm])
+		#print "k", k
+	return H[sm]

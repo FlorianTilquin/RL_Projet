@@ -22,7 +22,7 @@ def HCT(f,v1,ro,c,d,Tmax):
 		if( t==2**(np.floor(np.log(t))+1) ):
 			for i in xrange(len(covTree)):
 				h = covTree[i][0]
-				U[idx][1] = U[idx][-1] + v1*ro**h + c*np.sqrt(np.log(1.0/delta[t-1])/U[idx][0])
+				U[i][1] = U[i][-1] + v1*ro**h + c*np.sqrt(np.log(1.0/delta[t-1])/U[i][0])
 			ct = list(covTree)
 			ct.reverse()
 			for k in xrange(len(covTree)):

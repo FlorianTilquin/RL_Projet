@@ -7,9 +7,12 @@ from time import time as ti
 
 def HOO(f,nu,rho,Nev,T=[],N=[],mu=[],B=[],U=[],D = {},Pos =[],REW = []):
 	lnev = 2*np.log(Nev)
-	nuro = nu*rho**np.arange(25)
-	Lnev = np.sqrt(lnev/np.arange(1,Nev+2))
+	#nuro = nu*rho**np.arange(25)
+	#Lnev = lnev/np.arange(1,Nev+10)
 	for n in xrange(1,Nev+1):
+		#print "n=",n
+		#if n %50 == 0:
+		#	print n
 		P = [[0,1]]
 		h,i = 0,1
 		while [h,i] in T:
@@ -32,7 +35,7 @@ def HOO(f,nu,rho,Nev,T=[],N=[],mu=[],B=[],U=[],D = {},Pos =[],REW = []):
 		Y = f(X)
 		REW.append(Y)
 		T.append([H,I])
-		D[str(H)+str(I)] = n-1
+		D[str(H)+str(I)] = len(T)-1
 		N.append(1)
 		mu.append(Y)
 		U.append(mu)
@@ -41,7 +44,7 @@ def HOO(f,nu,rho,Nev,T=[],N=[],mu=[],B=[],U=[],D = {},Pos =[],REW = []):
 			N[n_ind] += 1
 			mu[n_ind] *= (1-1./N[n_ind])
 			mu[n_ind] += Y/N[n_ind]
-			U[n_ind] = mu[n_ind] + Lnev[N[n_ind]-1] + nuro[k]
+			U[n_ind] = mu[n_ind] + lnev/N[n_ind] + nu*rho**k
 		B.append( [np.inf,np.inf] )
 		P1 = list(P)
 		while P1 != [[0,1]] :
