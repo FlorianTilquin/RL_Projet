@@ -36,7 +36,7 @@ As previously mentioned, a gradient-based approach is not likely to perform well
 \label{regret}
 R_T = \underset{t=1}{\overset{T}{\sum}}f(x^*)-f(x_t)
 \end{equation}
-In practice, for the algorithms considered, $x_t = \mathcal{U}(I_t)$. This means that $x_t$ is pulled uniformly at random in an interval $I_t$ that is chosen by the algorithm. The set of intervals defines a tree structure such that the set of leaves is a partition of $[0,1]$. In the end, the original problem is transformed into a particular case of regular multi-armed bandit. Without any prior information on the function to optimize, we only consider here the family of \textit{dyadic trees}. As mentioned in~\cite{bull2013adaptive}, the dyadic tree on [0, 1) is the tree with root node [0, 1), and where each node [a, b) has children $[a, \frac{1}{2}(a+b), [ \frac{1}{2}(a+b), b)$. An example of dyadic tree is displayed in~\ref{dydtree}.
+In practice, for the algorithms considered, $x_t = \mathcal{U}(I_t)$. This means that $x_t$ is pulled uniformly at random in an interval $I_t$ that is chosen by the algorithm. The set of intervals defines a tree structure such that the set of leaves is a partition of $[0,1]$. In the end, the original problem is transformed into a particular case of regular multi-armed bandit. Without any prior information on the function to optimize, we only consider here the family of \textit{dyadic trees}. As mentioned in~\cite{bull2013adaptive}, the dyadic tree on [0, 1) is the tree with root node [0, 1), and where each node [a, b) has children $[a, \frac{1}{2}(a+b), [ \frac{1}{2}(a+b), b)$. An example of dyadic tree is displayed in~\ref{dydtree}. 
 
 \begin{figure}
 \label{dydtree}
@@ -45,23 +45,60 @@ In practice, for the algorithms considered, $x_t = \mathcal{U}(I_t)$. This means
 \caption{A dyadic tree from~\cite{bull2013adaptive}}
 \end{figure}
 
+\subsection{Notations}
+In the rest of this paper, we note:
+\begin{itemize}
+\item $h,i$ the coordinates of a node in the dyadic tree such that $h$ is the depth of the node and $i$ its width
+\item $\widehat{\mu}_{h,i}$ the empirical estimate of the reward associated to the node $h,i$
+\item $n_{h,i}$ the number of times the node $h,i$ has been hit during the evaluations up to the current time
+\item $T_{max}$ the total number of evaluations of the function allowed or \textit{budget}
+\end{itemize} 
+
 
 
 \section{Algorithms}
 \label{algo}
-In this section, we list the algorithms to be compared and briefly present their respective behaviors. The reader is welcome to consult the original papers for more detailed descriptions and proofs on theoretical performances. As previously mentioned, each algorithms defines a sequence of intervals $I_t$ from which $x_t$ is sampled. Typically, the selected interval maximizes a certain selection function of $(x_{t'},y_{t'})_{t'< t}$ among a subset of considered intervals. The main differences in the following algorithms is the definition of the selection function and the choice of the considered intervals at each time step.
+In this section, we list the algorithms to be compared and briefly present their respective behaviors. The reader is welcome to consult the original papers for more detailed descriptions and proofs on theoretical performances. As previously mentioned, each algorithm defines a sequence of intervals $I_t$ from which $x_t$ is sampled. Typically, the selected interval maximizes a certain selection function of $(x_{t'},y_{t'})_{t'< t}$ among a subset of considered intervals. The main differences in the following algorithms is the definition of the selection function, which is most of the time an upper bound on the expected reward of the arm and the choice of the considered intervals at each time step, which is sometimes called "expansion rule".
 
-\subsection{Hierarchical Optimistic Optimization}
+\subsection{Hierarchical and Parallel Optimistic Optimization}
+This algorithm is called \textit{Optimistic} because its idea is to sequentially building a tree and try the most promising children.
+\paragraph{Upper bounds} $B_{h,i}=min(U_{h,i},max(B_{h+1,2i-1},B_{h,2i}))$ where:
+\begin{equation}
+\label{uhoo}
+U_{h,i}=\widehat{\mu}_{h,i}+\nu \rho^h+\sqrt{\dfrac{2\log(T_{max})}{n_{h,i}}}
+\end{equation}
+\paragraph{Update rule} At each time step, the most promising child with respect to B is added to the tree.
 
-\subsection{Parallel Optimistic Optimization}
+\paragraph{Optimistic Optimization}
+When there is no prior knowledge on the function to optimize, the tuning of the parameters $\nu$ and $\rho$ of equation~\ref{uhoo} can be difficult. Thus, the idea of this algorithm is to sequentially launch several HOOs that keep running in parallel in order to get the best parameters. Note that this algorithm can be run with other algorithms than HOO such as HCT.
 
 \subsection{High-Confidence Tree}
-This algorithm exists in two different versions: with correlated and uncorrelated feedback. For the purpose of performance comparison with other algorithms, we only consider the uncorrelated feedback here.
+This algorithm exists in two different versions: with correlated and uncorrelated feedback. For the purpose of performance comparison with other algorithms, we only consider the uncorrelated feedback, which is close to HOO algorithm. In order to be pulled, an arm must maximize $B$ among the arms that have not been pulled enough yet. In order to reduce computational cost, $U$ is refreshed only when $t$ is a power of 2.
+\paragraph{Upper bounds} $B_{h,i}=min(U_{h,i},max(B_{h+1,2i-1},B_{h,2i}))$ where:
+\begin{equation}
+\label{uhct}
+U_{h,i}=\widehat{\mu}_{h,i}+\nu \rho^h+\sqrt{\dfrac{c^2\log(1/min(1,\frac{c_1\delta}{2^{\lfloor \log(t) \rfloor + 1}}))}{n_{h,i}}}
+\end{equation}
+\paragraph{Update rule} Only the leaves of the current covering tree that have not been pulled enough with respect to a certain threshold $\tau_h(t)$ are expanded.
 
 \subsection{Stochastic Simultaneous Optimistic Optimization}
+This algorithm is called \textit{simultaneous} because it can perform at each time steps as many evaluations as the depth of its current covering tree. Indeed, the idea is that, in order not to rush into a local maximum, it is good to keep sampling from small depths until the estimation of the local reward is better known. Each node a its own evaluation budget $k$ in order no to spend to much budget on the first nodes.
+\paragraph{Upper bounds} In order to be pulled, a leaf must both have a positive remaining individual budget and maximize $B$ among the leaves of the same depth:
+\begin{equation}
+\label{bsoo}
+B_{h,i}=\widehat{\mu}_{h,i}+\sqrt{\dfrac{\log(\frac{T_{max}k}{\delta})}{2n_{h,i}}}
+\end{equation}
+\paragraph{Update rule} Once a node that maximizes $B$ has used its entire budget, it is expanded.
+
 
 \subsection{Adaptive-Treed Bandits}
-For this algorithm, the selection function of the interval has the usual structure: \textit{average reward + confidence radius}. Once the confidence diameter becomes smaller than the actual diameter of the interval, it is split into two knew smaller intervals that can be selected for pulling.
+This algorithm has a slightly different spirit than the others. The tree is not sequentially built but given as an input and the evaluations are performed among a set of \textit{active boxes} or \textit{active nodes} (which in dimension 1 are simply intervals). Knowing the entire tree allows to update the statistics of the children of active nodes each time an arm is pulled, while in the other algorithms, only the statistics of the parents could be updated.
+\paragraph{Upper bounds} At each time step, the arm pulled is chosen among the active nodes and maximizes:
+\begin{equation}
+B_{h,i} = \widehat{\mu}_{h,i}+(1+2\nu)r_{h,i}
+\end{equation}
+where $r_{h,i}=2\sqrt{\dfrac{\log[2^{h+1}(\tau+n_{h,i})]}{n_{h,i}}}$ is the confidence radius of the interval.
+\paragraph{Update rule} If an active node has a radius small enough compared to the ones of its children, it is removed and replaced by them.
 
 \section{Results}
 \subsection{Experimental Setup}
