@@ -46,11 +46,11 @@ def SOO(f,n,k,hmax,delta):
                         N[im] = N[im] + 1
                         MU[im] = (1-1./N[im])*MU[im] + r/N[im]
                         t = t+1
+						Pold = [i,[hx,ix] for i,[hx,ix] in enumerate(T) if (x >= (ix-1.)/2.**hx)*(x <= ix/2.**hx)]
+						for Iold,[hold,old] in Pold:
+							N[Iold] += 1
+							MU[Iold] = (1-1./N[Iold])*MU[Iold] + r/N[Iold]
                     else :
-                        #T.extend([[H+1,2*I-1],[H+1,2*I]])
-                        #b.extend([np.inf,np.inf])
-                        #MU.extend([0,0])
-                        #N.extend([0,0])
                         for s in [[H+1,2*I-1],[H+1,2*I]]:
                             if s not in T:
                                 T.append(s)
@@ -64,18 +64,9 @@ def SOO(f,n,k,hmax,delta):
                                 else :
                                     N.append(0)
                                     MU.append(0)
-                            #else :
-                            #    #MU[im] = -np.inf
-                            #    r,X = rew(f,[H,I]) # On prend un X dans la boite correspondante et on tire le bras
-                            #    REW.append(r)
-                            #    P.append(X)
-                            #    #N[im] = N[im] + 1
-                            #    MU[im] = (1-1./N[im])*MU[im] + r/N[im]
-                            #    t = t+1
                         bmax = b[im]
                         if depth != H+1:
                             depth = H+1
-                    
     hm = min(depth,hmax) # on va chercher la profondeur maximale atteinte pour laquelle on a calcule toutes les b-values (il se peut que depth = hmax+1 et dans ce cas les dernieres b-values n'ont pas ete calculees)
     MUh = [[MU[j],i] for j,[h,i] in enumerate(T) if h == hm] # Je vais prendre le noeud a profondeur hm qui a la plus grosse MU
     MUh = np.array(MUh)
