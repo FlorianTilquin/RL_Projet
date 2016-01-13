@@ -5,10 +5,8 @@ import numpy as np
 import numpy.random as rd
 from time import time as ti
 
-def HOO(f,nu,rho,Nev,T=[],N=[],mu=[],B=[],U=[],D = {},Pos =[],REW = []):
+def HOO(f,Nev,nu,rho,noise = 0,T=[],N=[],mu=[],B=[],U=[],D = {},Pos =[],REW = []):
 	lnev = 2*np.log(Nev)
-	#nuro = nu*rho**np.arange(25)
-	#Lnev = lnev/np.arange(1,Nev+10)
 	for n in xrange(1,Nev+1):
 		#print "n=",n
 		#if n %50 == 0:

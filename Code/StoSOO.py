@@ -40,7 +40,7 @@ def SOO(f,n,k,hmax,delta,noise):
 					#print im,[H,I],bmax2
 					if N[im] < k :# si on a fait moins de k evaluations a ce noeud et que c'est le meilleur, on continue
 						r,X = rew(f,[H,I]) # On prend un X dans la boite correspondante et on tire le bras
-						r = r + rd.rand()*noise-noise/2.
+						r = r + rd.randn()*noise-noise*0.5
 						REW.append(r)
 						P.append(X)
 						N[im] = N[im] + 1

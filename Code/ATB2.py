@@ -4,7 +4,7 @@ import numpy as np
 import numpy.random as rd
 
 
-def ATB(f,Nev,depth,eps,nu):
+def ATB(f,Nev,depth,eps,nu,noise):
 	POS = []
 	REW = []
 	A = [[0,1]]
@@ -35,7 +35,7 @@ def ATB(f,Nev,depth,eps,nu):
 		x = rd.uniform(alpha,beta)
 		#print x
 		POS.append(x)
-		rew = f(x)
+		rew = f(x) + noise*rd.randn()-0.5*noise
 		REW.append(rew)
 		ix = np.ceil(x*2**depth).astype(int)
 		B = [depth,ix]
@@ -115,7 +115,7 @@ def ATB(f,Nev,depth,eps,nu):
 				#print "Il y a un noeud qui necessite une visite; Sortie de boucle"
 				break
 		#	print "A",A
-	return T,A,Mu,N,R,I,REW,POS
+	return T,A,Mu,N,R,I,POS,REW
 
 def add_child(node,T,R,I,Mu,N,D):
 	T.append(node)
