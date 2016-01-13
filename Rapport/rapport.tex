@@ -31,11 +31,13 @@ The goal of this paper is to test and compare recently developed algorithms for 
 \end{equation}
 
 \subsection{About the multi-armed bandit}
-As previously mentioned, a gradient-based approach is not likely to perform well on the considered functions. Thus, the idea is to use a multi-armed bandit with theoretically an infinite number of arms, sometimes called \textit{continuum-armed bandit}. The algorithms progressively defines a sequence of evaluation points $x_t$ and observes a reward $y_t=f(x_t)+\xi_t$ where $\xi_t$ is a noise term. The choice of $x_{t+1}$ depends on the sequence of $(y_{t'})_{t'\le t}$ and is meant to converge to $x^*$ while controlling the cumulative regret:
+\label{mab}
+As previously mentioned, a gradient-based approach is not likely to perform well on the considered functions. Thus, the idea is to use a multi-armed bandit with theoretically an infinite number of arms, sometimes called \textit{continuum-armed bandit}. The algorithms progressively defines a sequence of evaluation points $x_t$ and observes a reward $y_t=f(x_t)+\xi_t$ where $\xi_t$ is a noise term. The choice of $x_{t+1}$ depends on the sequence of $(y_{t'})_{t'\le t}$. Depending on the algorithm, it is meant to converge to $x^*$ while controlling the cumulative regret:
 \begin{equation}
 \label{regret}
 R_T = \underset{t=1}{\overset{T}{\sum}}f(x^*)-f(x_t)
 \end{equation}
+Or just simply ensuring that a good estimate of $x^*$ is present in the sequence (i.e minimizing simple regret). They can also be designed to be robust to noise in function estimations or correlated feedback.
 In practice, for the algorithms considered, $x_t = \mathcal{U}(I_t)$. This means that $x_t$ is pulled uniformly at random in an interval $I_t$ that is chosen by the algorithm. The set of intervals defines a tree structure such that the set of leaves is a partition of $[0,1]$. In the end, the original problem is transformed into a particular case of regular multi-armed bandit. Without any prior information on the function to optimize, we only consider here the family of \textit{dyadic trees}. As mentioned in~\cite{bull2013adaptive}, the dyadic tree on [0, 1) is the tree with root node [0, 1), and where each node [a, b) has children $[a, \frac{1}{2}(a+b), [ \frac{1}{2}(a+b), b)$. An example of dyadic tree is displayed in~\ref{dydtree}. 
 
 \begin{figure}
@@ -138,7 +140,8 @@ The associated plots are displayed in \ref{fig:functions}. It is important to ha
 \end{figure}
 
 \paragraph{Algorithms setup}
-In order to compare the performances of the different algorithms, we set a total number of function evaluations $T_{max}$ and a number of runs $N$. Then we compute for each and each algorithm run the best value returned $\widehat{x}^*$. Besides, we keep track of all the points sampled during each run and their associated reward in order to check the concentration of evaluations around the maximums and to compute quantities of interest such as the cumulative regret defined in~\ref{regret}, the average cumulative regret or the best estimate up to time $t$. The tuning of the parameters specific to each algorithm is performed manually. The algorithms are tested without noise and with different Gaussian noises.
+In order to compare the performances of the different algorithms, we set a total number of function evaluations $T_{max}$ and a number of runs $N$. Then we compute for each and each algorithm run the best value returned $\widehat{x}^*$. Besides, we keep track of all the points sampled during each run and their associated reward in order to check the concentration of evaluations around the maximums and to compute quantities of interest such as the cumulative regret defined in~\ref{regret}, the average cumulative regret or the best estimate up to time $t$. The tuning of the parameters specific to each algorithm is performed manually. The algorithms are tested without noise and with different Gaussian noises.\\
+As mentioned in section~\ref{mab}, the algorithms have different objectives (minimizing cumulative or simple regret for example), thus one must evaluate the performances according to each design.
 
 
 
