@@ -3,7 +3,7 @@
 import numpy as np
 import numpy.random as rd
 
-def HCT(f,Nev,nu,rho,delta):
+def HCT(f,Nev,nu,rho,delta,noise):
 	c = 2*np.sqrt(1./(1-rho))
 	c1 = (rho/(3*nu))**(0.125)
 	par = Nev,c,c1,delta,nu,rho
@@ -19,7 +19,8 @@ def HCT(f,Nev,nu,rho,delta):
 	POS = []
 	REW = []
 	while t < Nev+1 :
-		#print t
+		if t%50 == 0:
+			print t
 		if np.log2(t) == np.floor(np.log2(t)):
 			print "alignement des 12 lunes"
 			for i in xrange(len(T)) :
@@ -38,7 +39,7 @@ def HCT(f,Nev,nu,rho,delta):
 		alpha,beta = (i-1.)/2.**h,i/2.**h
 		x = rd.uniform(alpha,beta)
 		POS.append(x)
-		r = f(x)
+		r = f(x) + noise*rd.randn()-noise*0.5
 		REW.append(r)
 		t = t + 1
 		tp = 2**(np.floor(np.log2(t))+1)
@@ -50,8 +51,8 @@ def HCT(f,Nev,nu,rho,delta):
 		B = UpdateB(T,P,[h,i],D,U,B)
 		tau = c**2*np.log(1/min(c1*delta/tp,1.))/(nu**2*rho**(2*h))
 		#tau = c**2/(nu**2*rho**(2*h))
-		if N[idx] >= tau and [h+1,2*i] not in T :
-			print h
+		if N[idx] >= 1./tau and [h+1,2*i] not in T :
+			#print h
 			D[str(h+1)+str(2*i-1)] = len(T)
 			D[str(h+1)+str(2*i)] = len(T)+1
 			T.extend([[h+1,2*i-1],[h+1,2*i]])
@@ -70,7 +71,7 @@ def OptTraverse(T,B,D,N,t,par):
 	P = [[0,1]]
 	idx = 0
 	tau = 1. #le vrai tau ?N[0] ?
-	while [h+1,2*i] in T and N[idx] >= tau:
+	while [h+1,2*i] in T and N[idx] >= 1./tau:
 		#print "zbra"
 		idx = D[str(h+1)+str(2*i-1)]
 		if B[idx]>B[idx+1]:

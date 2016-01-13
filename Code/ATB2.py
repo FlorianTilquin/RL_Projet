@@ -4,7 +4,7 @@ import numpy as np
 import numpy.random as rd
 
 
-def ATB(f,Nev,depth,eps,gamma):
+def ATB(f,Nev,depth,eps,nu):
 	POS = []
 	REW = []
 	A = [[0,1]]
@@ -16,12 +16,14 @@ def ATB(f,Nev,depth,eps,gamma):
 	N = [0]*3
 	Mu = [0.]*3
 	R = [np.inf]*3
-	dum = 2./gamma
-	nu = 8*np.sqrt(dum*np.log2(dum))
+	#dum_rad = np.sqrt(8*np.log(Nev))
+	#dum = 2./gamma
+	#nu = 8*np.sqrt(dum*np.log2(dum))
 	tau = 4./eps
 	I = [np.inf]*3
 	for t in xrange(1,Nev+1):
-		#print "etape",t
+		print len(A)
+		print "etape",t
 		IA = [I[D[ str(h)+str(i) ]] for [h,i] in A if h<=depth]
 		#print "I",IA
 		#print "A-IA",[T[D[ str(h)+str(i) ]] for [h,i] in A if h<=depth]
@@ -45,7 +47,7 @@ def ATB(f,Nev,depth,eps,gamma):
 				#print "B j'ajoute le node",B,"a T"
 				N.append(1)
 				Mu.append(rew)
-				rho = 2.**(B[0]+1.)
+				rho = 2.**-(B[0]+1.)## + ou - ??
 				dum = 2.*np.sqrt(np.log(rho*(tau+1.)))
 				R.append( dum )
 				I.append(rew + (1.+2*nu)*dum)
@@ -56,8 +58,7 @@ def ATB(f,Nev,depth,eps,gamma):
 				idx = D[str(Hb)+str(Ib)]
 				N[idx] += 1
 				Mu[idx] = (1.-1./N[idx])*Mu[idx] + rew/N[idx]
-				rho = 2.**(Hb+1.)
-				#print rho,rho*(tau+N[idx]),np.log( rho*(tau+N[idx]) )/N[idx]
+				rho = 2.**-(Hb+1.)
 				dum = 2.*np.sqrt(np.log( rho*(tau+N[idx]) )/N[idx])
 				R[idx] = dum
 				#print "N,R,Mu",N[idx],(1.+2*nu)*dum*0.01,Mu[idx]
@@ -71,6 +72,7 @@ def ATB(f,Nev,depth,eps,gamma):
 			if np.array([1. for ind in indA if N[ind] == 0]).sum() == 0: # si tout le monde a ete visite au moins une fois
 				#print "la condition 1 est valide"
 				A_d = [a for a in A if a[0] < depth]
+				condition = 0
 				for [h,i] in A_d : # On construit le W de chacun dans A
 					#print "Ad",A_d
 					#print "h,i in A",[h,i],A_d
@@ -88,8 +90,14 @@ def ATB(f,Nev,depth,eps,gamma):
 					m1 = 2*r0
 					m2 = 2*r1
 					m3 = abs(Mu[ind_c0]-Mu[ind_c1]) + r0 + r1
-					#print max(m1,m2,m3) # ce max est-il souvent fini dans les faits ?
-					if max(m1,m2,m3) >= nu*R[ind_p]:
+					#print m3,abs(Mu[ind_c0]-Mu[ind_c1]),r0,r1
+					if max(m1,m2) == np.inf:
+						cond2 = min(m1,m2)
+					else :
+						cond2 = max(m1,m2,m3)
+					#print cond2,nu*R[ind_p] # ce max est-il souvent fini dans les faits ?
+					if cond2 >= nu*R[ind_p]:
+						condition = 1
 						#print "la conditon c2 est validee par:"
 						#print "le violeur",[h,i],"dans",A
 						A.remove([h,i])
