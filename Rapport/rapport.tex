@@ -107,9 +107,9 @@ We test the algorithms on different reference functions from~\cite{valko2013stoc
 \begin{enumerate}
 \item Two-sine product function: $f_1(x) = \frac{1}{2} (\sin(13x) . \sin(27x))+0.5$.
 \item Garland function: $f_2(x) = 4x(1-x).(\frac{3}{4}+\frac{1}{4}(1-\sqrt{|\sin(60x)|}))$.
-\item Grill function: $f_3(x) = s(\log_2(|x-0.5|).(\sqrt{|x-0.5|}-(x-0.5)^2)-\sqrt{|x-0.5|}$ where $s(x)=\mathbf{1}(x- \lfloor x \rfloor \in [0,0.5])$.
+\item Grill function: $f_3(x) =1+ s(\log_2(|x-0.5|).(\sqrt{|x-0.5|}-(x-0.5)^2)-\sqrt{|x-0.5|}$ where $s(x)=\mathbf{1}(x- \lfloor x \rfloor \in [0,0.5])$.
 \end{enumerate}
-The associated plots are displayed in \ref{fig:functions}.
+The associated plots are displayed in \ref{fig:functions}. It is important to have in mind that sampling a point at random for this functions would provide an average regret of approximately 0.46, 0.46 and 0.32 respectively.
 
 \begin{figure}
 \label{fig:functions}
@@ -138,25 +138,9 @@ The associated plots are displayed in \ref{fig:functions}.
 \end{figure}
 
 \paragraph{Algorithms setup}
-In order to compare the performances of the different algorithms, we set a desired precision $\epsilon$ and a total number of function evaluations $T$ and a number of runs $N$. Then we compute for each and each algorithm run the best value returned $\widehat{x}^*$ and the cumulative regret defined in~\ref{regret}. The run is considered a success if $|\widehat{x}^*-x^*|\le \epsilon$. The success rates are average cumulative regrets are displayed in~\ref{restab}. The tuning of the parameters specific to each algorithm is performed manually.
+In order to compare the performances of the different algorithms, we set a total number of function evaluations $T_{max}$ and a number of runs $N$. Then we compute for each and each algorithm run the best value returned $\widehat{x}^*$. Besides, we keep track of all the points sampled during each run and their associated reward in order to check the concentration of evaluations around the maximums and to compute quantities of interest such as the cumulative regret defined in~\ref{regret}, the average cumulative regret or the best estimate up to time $t$. The tuning of the parameters specific to each algorithm is performed manually. The algorithms are tested without noise and with different Gaussian noises.
 
-\begin{figure}
-\label{restab}
-\centering
-\textbf{Success rates and average cumulative regrets of the algorithms}
-\begin{tabular}{|l|c|c|c|c|c|c|}
-\hline
-Algorithm & $f_1$ & $f_2$ & $f_3$ & $\bar{R}_1$ & $\bar{R}_2$ & $\bar{R}_3$ \\
-\hline
-HOO & & & & & &\\
-POO & & & & & &\\
-HCT & & & & & &\\
-StoSOO & & & & & &\\
-ATB & & & & & &\\
-\hline
-\end{tabular}
-\caption{These results are obtained for $\epsilon=$, $T=$ and $N=$.}
-\end{figure}
+
 
 \subsection{Analysis}
 
