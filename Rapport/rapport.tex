@@ -37,7 +37,7 @@ As previously mentioned, a gradient-based approach is not likely to perform well
 \label{regret}
 R_T = \underset{t=1}{\overset{T}{\sum}}f(x^*)-f(x_t)
 \end{equation}
-Or just simply ensuring that a good estimate of $x^*$ is present in the sequence (i.e minimizing simple regret). They can also be designed to be robust to noise in function estimations or correlated feedback.
+Or just simply ensuring that a good estimate of $x^*$ is present in the sequence (i.e minimizing simple regret). They can also be designed to be robust to noise in function estimations or correlated feedback. This design depends on the optimization context: is it an off-line or online optimization ? how long does an evaluation of the function take? etc.\\
 In practice, for the algorithms considered, $x_t = \mathcal{U}(I_t)$. This means that $x_t$ is pulled uniformly at random in an interval $I_t$ that is chosen by the algorithm. The set of intervals defines a tree structure such that the set of leaves is a partition of $[0,1]$. In the end, the original problem is transformed into a particular case of regular multi-armed bandit. Without any prior information on the function to optimize, we only consider here the family of \textit{dyadic trees}. As mentioned in~\cite{bull2013adaptive}, the dyadic tree on [0, 1) is the tree with root node [0, 1), and where each node [a, b) has children $[a, \frac{1}{2}(a+b), [ \frac{1}{2}(a+b), b)$. An example of dyadic tree is displayed in~\ref{dydtree}. 
 
 \begin{figure}
@@ -71,7 +71,7 @@ U_{h,i}=\widehat{\mu}_{h,i}+\nu \rho^h+\sqrt{\dfrac{2\log(T_{max})}{n_{h,i}}}
 \end{equation}
 \paragraph{Update rule} At each time step, the most promising child with respect to B is added to the tree.
 
-\paragraph{Optimistic Optimization}
+\paragraph{Parallel Optimistic Optimization}
 When there is no prior knowledge on the function to optimize, the tuning of the parameters $\nu$ and $\rho$ of equation~\ref{uhoo} can be difficult. Thus, the idea of this algorithm is to sequentially launch several HOOs that keep running in parallel in order to get the best parameters. Note that this algorithm can be run with other algorithms than HOO such as HCT.
 
 \subsection{High-Confidence Tree}
@@ -111,7 +111,7 @@ We test the algorithms on different reference functions from~\cite{valko2013stoc
 \item Garland function: $f_2(x) = 4x(1-x).(\frac{3}{4}+\frac{1}{4}(1-\sqrt{|\sin(60x)|}))$.
 \item Grill function: $f_3(x) =1+ s(\log_2(|x-0.5|).(\sqrt{|x-0.5|}-(x-0.5)^2)-\sqrt{|x-0.5|}$ where $s(x)=\mathbf{1}(x- \lfloor x \rfloor \in [0,0.5])$.
 \end{enumerate}
-The associated plots are displayed in \ref{fig:functions}. It is important to have in mind that sampling a point at random for this functions would provide an average regret of approximately 0.46, 0.46 and 0.32 respectively.
+The associated plots are displayed in \ref{fig:functions}. It is important to have in mind that sampling a point at random for this functions would provide an average regret of approximately $0.46$, $0.46$ and $0.32$ respectively.
 
 \begin{figure}
 \label{fig:functions}
@@ -146,30 +146,27 @@ As mentioned in section~\ref{mab}, the algorithms have different objectives (min
 
 
 \subsection{Analysis}
+On figure~\ref{fig:position1000} we can see the different sampling strategies of the algorithms. For HOO, we see a progressive dichotomy of the space that ends up in a local maximum. Note that once a zone is abandoned, the algorithm does not seem to ever come back to it but it actually depends on the settings. This explains the distinct columns in POO that correspond to different local maximums, fortunately, only the best is kept in the end. For HCT, we see that the sampling is progressively concentrated in the three most promising areas with a higher concentration for the one on the right that actually contains $x^*$. The "jumps" in the sampling correspond to the refresh of all bounds that happens when $t$ is a power of 2, this triggers a new exploration phase in order to avoid being trapped into local minimums like it can happen for HOO. Finally we see that StoSOO maintains a higher exploration rate, indeed, this algorithm focuses on simple and not cumulative regret. But still, it is clear that more sampling is performed in the areas of local maximums.\\
+
+Figure~\ref{fig:cumulative1000} presents the cumulative regrets of the algorithms. The more difficult the function, the higher the regret. Besides, depending on the level of exploration of the algorithm, we see different increase speed. For example, HOO stabilizes faster than the other algorithms thus after a certain numbers of steps, its cumulative regret is either constant or linear. On the contrary, SOO always maintains exploration and has consequently a higher cumulative regret.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%  POSITIONS 1000 POINTS  %%%%%%%%%%%%%%%%%%%%%
+\begin{figure}
+\label{fig:position1000}
+\hspace{-5cm}\includegraphics[trim = {0 6cm 0 4cm},clip]{marginal1000.pdf}
+\vspace{-4cm}
+  \caption{Points sampled by the algorithms for Sinprod with 1000 evaluations. From top left to bottom right : HOO, POO, StoSOO and HCT. For this function, $x^*\simeq 0.86$ and the second best point is roughly in $0.39$.}
+\end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%% CUMULATIVE 1000 POINTS %%%%%%%%%%%%%%%%%%%%
-\begin{figure}[!ht]
+\begin{figure}
 \label{fig:cumulative1000}
 \hspace{-5cm}\includegraphics[trim={0 6cm 0 4cm},clip]{cumulative1000.pdf}
 \vspace{-12cm}
   \caption{The cumulative regret of the 5 algorithms on the three difficult functions, with 1000 evaluations. From left to right : Grill function, Garland function, Sinprod function. }
 \end{figure}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%% CUMULATIVE 5000 POINTS %%%%%%%%%%%%%%%%%%%%
-\vspace{-10cm}
-\begin{figure}[!ht]
-\label{fig:cumulative5000}
-\hspace{-5cm}\includegraphics[trim = {0 6cm 0 4.5cm},clip]{cumulative5000.pdf}
-\vspace{-12cm}
-  \caption{The cumulative regret of the 4 algorithms on the three difficult functions, with 5000 evaluations. From left to right : Grill function, Garland function, Sinprod function. }
-\end{figure}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%  MARGINAL 5000 POINTS  %%%%%%%%%%%%%%%%%%%%%
-\begin{figure}[!ht]
-\label{fig:position1000}
-\hspace{-5cm}\includegraphics[trim = {0 6cm 0 4cm},clip]{marginal1000.pdf}
-\vspace{-4cm}
-  \caption{The cumulative regret of the 5 algorithms on the three difficult functions, with 1000 evaluations. From left to right : Grill function, Garland function, Sinprod function. }
-\end{figure}
 
 %%%% BIBILIOGRAPHY %%%%
 \clearpage
