@@ -6,6 +6,7 @@
 \usepackage{fancyhdr}
 \usepackage{algorithm,algpseudocode}
 \usepackage{graphicx}
+\usepackage{hyperref}
 \input{zMC.tex}
 \input{zMCgraphe.tex}
 \zzpackages[english]
@@ -13,6 +14,10 @@
 \tikzset{
 zplot/.style={opacity=.8}
 }
+\hypersetup{ colorlinks=true, linkcolor=blue,
+	citecolor=green, filecolor=magenta,
+	urlcolor=cyan }
+
 
 \begin{document}
 
@@ -25,7 +30,7 @@ Optimization of very difficult functions}
 
 \section{Introduction}
 \subsection{Problem statement}
-The goal of this paper is to test and compare recently developed algorithms for the optimization of \textit{very difficult functions}. This work is based on the papers by Bubeck~\cite{bubeck2011x}, Grill~\cite{grill2015black}, Lazaric~\cite{azar2014online}, Bull~\cite{bull2013adaptive} and Valko~\cite{valko2013stochastic}. Each one of this paper has a specific definition of \textit{difficult} but the general idea is that the function to optimize has many local maxima and only one global maximum, it has very fast variations and is not necessarily differentiable such that a gradient-based approach to find the optimum should not be successful. All functions are assumed to be bounded and to have a compact support which, up to scaling can be fixed to be $[0,1]^p$. In this paper, we only consider $p=1$. In the end, the general formulation of the problem is:
+The goal of this paper is to test and compare recently developed algorithms for the optimization of \textit{very difficult functions}. This work is based on the papers by Bubeck~\cite{bubeck2011x}, Grill~\cite{grill2015black}, Lazaric~\cite{azar2014online}, Bull~\cite{bull2013adaptive} and Valko~\cite{valko2013stochastic}. Each one of this paper has a specific definition of \textit{difficult} but the general idea is that the function to optimize has many local maxima and only one global maximum, may have very fast variations and is not necessarily differentiable such that a gradient-based approach to find the optimum would not be successful. All functions are assumed to be bounded and to have a compact support which, up to scaling can be fixed to be $[0,1]^p$. In this paper, we only consider $p=1$. In the end, the general formulation of the problem is:
 \begin{equation}
 \mbox{maximize } f(x) \mbox{ for } x\in [0,1]
 \end{equation}
@@ -38,12 +43,12 @@ As previously mentioned, a gradient-based approach is not likely to perform well
 R_T = \underset{t=1}{\overset{T}{\sum}}f(x^*)-f(x_t)
 \end{equation}
 Or just simply ensuring that a good estimate of $x^*$ is present in the sequence (i.e minimizing simple regret). They can also be designed to be robust to noise in function estimations or correlated feedback. This design depends on the optimization context: is it an off-line or online optimization ? how long does an evaluation of the function take? etc.\\
-In practice, for the algorithms considered, $x_t = \mathcal{U}(I_t)$. This means that $x_t$ is pulled uniformly at random in an interval $I_t$ that is chosen by the algorithm. The set of intervals defines a tree structure such that the set of leaves is a partition of $[0,1]$. In the end, the original problem is transformed into a particular case of regular multi-armed bandit. Without any prior information on the function to optimize, we only consider here the family of \textit{dyadic trees}. As mentioned in~\cite{bull2013adaptive}, the dyadic tree on [0, 1) is the tree with root node [0, 1), and where each node [a, b) has children $[a, \frac{1}{2}(a+b), [ \frac{1}{2}(a+b), b)$. An example of dyadic tree is displayed in~\ref{dydtree}. 
+In practice, for the algorithms considered, $x_t = \mathcal{U}(I_t)$. This means that $x_t$ is pulled uniformly at random in an interval $I_t$ that is chosen by the algorithm. The set of intervals defines a tree structure such that the set of leaves is a partition of $[0,1]$. In the end, the original problem is transformed into a particular case of regular multi-armed bandit. Without any prior information on the function to optimize, we only consider here the family of \textit{dyadic trees}. As mentioned in~\cite{bull2013adaptive}, the dyadic tree on $[0, 1)$ is the tree with root node $[0, 1)$, and where each node $[a, b)$ has children $[a, \frac{1}{2}(a+b), [ \frac{1}{2}(a+b), b)$. An example of dyadic tree is displayed in~\ref{dydtree}.
 
 \begin{figure}
 \label{dydtree}
 \centering
-\includegraphics[scale=0.3]{dyadic}
+\includegraphics[scale=0.3]{tree.pdf}
 \caption{A dyadic tree from~\cite{bull2013adaptive}}
 \end{figure}
 
@@ -157,33 +162,38 @@ Finally, figure~\ref{fig:atb} present the results for ATB algorithm. As their is
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%  POSITIONS 1000 POINTS  %%%%%%%%%%%%%%%%%%%%%
 \begin{figure}
-\label{fig:position1000}
-\hspace{-5cm}\includegraphics[trim = {0 6cm 0 4cm},clip]{marginal1000.pdf}
-  \caption{Points sampled by the algorithms for Sinprod with 1000 evaluations. From top left to bottom right : HOO, POO, StoSOO and HCT. For this function, $x^*\simeq 0.86$ and the second best point is roughly in $0.39$.}
+\hspace{-4.5cm}\includegraphics[trim = {0 6cm 0 4cm},clip]{marginal1000.pdf}
+\vspace{-6cm}
+  \caption{\label{fig:position1000}Points sampled by the algorithms for Sinprod with 1000 evaluations. From top left to bottom right : HOO, POO, StoSOO and HCT. For this function, $x^*\simeq 0.86$ and the second best point is roughly in $0.39$.}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%% CUMULATIVE 1000 POINTS %%%%%%%%%%%%%%%%%%%%
 \begin{figure}
-\centering
-\label{fig:cumulative1000}
+\hspace{-5cm}
 \includegraphics[trim={0 6cm 0 4cm},clip]{cumulative1000.pdf}
-\caption{The cumulative regret of the 5 algorithms on the three difficult functions, with 1000 evaluations. From left to right : Grill function, Garland function, Sinprod function.}
+\vspace{-8cm}
+\caption{\label{fig:cumulative1000}The cumulative regret of the 5 algorithms on the three difficult functions, with 1000 evaluations. From left to right : Grill function, Garland function, Sinprod function.}
 \end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%% NOISE = 0.1 %%%%%%%%%%%%%%%%%%%%
+\vspace*{-20cm}
 \begin{figure}
-\centering
-\label{fig:noise01}
+\hspace{-5cm}
 \includegraphics[trim={0 6cm 0 4cm},clip]{best1000_01.pdf}\\
+\end{figure}
+\begin{figure}
+\vspace{-10cm}
+\hspace{-5cm}
 \includegraphics[trim={0 6cm 0 4cm},clip]{best1000_1.pdf}
- \caption{Best current regret under noisy estimation sampled from $\mathcal{N}(0,0.1)$ (top line) and $\mathcal{N}(0,1)$ (bottom line). From left to right : Grill function, Garland function, Sinprod function.}
+\vspace{-10cm}
+ \caption{\label{fig:noise01}Best current regret under noisy estimation sampled from $\mathcal{N}(0,0.1)$ (top line) and $\mathcal{N}(0,1)$ (bottom line). From left to right : Grill function, Garland function, Sinprod function.}
 \end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%% ATB %%%%%%%%%%%%%%%%%%%%
 \begin{figure}
-\centering
-\label{fig:atb}
+\hspace{-5cm}
 \includegraphics[trim={0 6cm 0 4cm},clip]{ATB.pdf}
-\caption{From the left to the right: simple and cumulative regrets and sampled points for ATB algorithm on Sinprod optimization.}
+\vspace{-6cm}
+\caption{\label{fig:atb}From the left to the right: simple and cumulative regrets and sampled points for ATB algorithm on Sinprod optimization.}
 \end{figure}
 %%%% BIBILIOGRAPHY %%%%
 \clearpage
