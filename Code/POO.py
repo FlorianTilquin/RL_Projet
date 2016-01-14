@@ -45,7 +45,7 @@ def POO(f,Nev,rhomax,numax,noise):
 			N = 2*N
 			k = k + NevH
 		for i,s in enumerate(S) :
-			H[i] = list(HOO(f,s[0],s[1],1,*H[i],noise = noise))
+			H[i] = list(HOO(f,1,s[0],s[1],noise,*H[i]))
 			POS_global.append(H[i][-2][-1])
 			REW_global.append(H[i][-1][-1])
 			#Ni = H[i][1]

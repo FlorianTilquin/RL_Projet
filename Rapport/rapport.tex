@@ -146,178 +146,33 @@ As mentioned in section~\ref{mab}, the algorithms have different objectives (min
 
 
 \subsection{Analysis}
+%%%%%%%%%%%%%%%%%%%%%%%%%%% CUMULATIVE 1000 POINTS %%%%%%%%%%%%%%%%%%%%
+\begin{figure}[!ht]
+\label{fig:cumulative1000}
+\hspace{-5cm}\includegraphics[trim={0 6cm 0 4cm},clip]{cumulative1000.pdf}
+\vspace{-12cm}
+  \caption{The cumulative regret of the 5 algorithms on the three difficult functions, with 1000 evaluations. From left to right : Grill function, Garland function, Sinprod function. }
+\end{figure}
 
-%%%%%%%%% ANNEXES %%%%%%%
-\appendix
-\section{S'more random shit in the appendix}
-\subsection{HOO}
-\begin{algorithm}[!Htop]
-	\small
-\caption{the hierarchical optimistic optimization algorithm}
-\begin{algorithmic}[1]
-	\For{n = 1 .. Nev}
-		\State $P \gets {[0,1]}$
-		\State $h,i\gets 0,1$
-		\While{$[h,i] \in \mathcal{T}$}
-			\If{$B_{h+1,2i-1} >B_{h+1,2i}$}
-				\State $h,i \gets h+1,2i-1 $
-			\ElsIf{$B_{h+1,2i-1} <B_{h+1,2i}$}
-				\State $h,i \gets h+1,2i $
-			\Else
-				\State $Z \sim Ber(0.5)$
-				\State $h,i \gets h+1,2i-Z$
-			\EndIf
-			\State $P \gets P \cup {[h,i]}$
-		\EndWhile
-		\State $H,I \gets h,i$
-		\State $X \sim \mathcal{U}(\mathcal{P}_{H,I})$
-		\State reward: $Y = f(X)$
-		\State $\mathcal{T} \gets \mathcal{T} \cup {[H,I]}$
-		\ForAll{$[h,i] \in P$}
-			\State $T_{h,i} \gets T_{h,i}+1$
-			\begin{large}
-			\State $\mu_{h,i}\gets (1-\frac{1}{T_{h,i}})\mu_{h,i}+\frac{Y}{T_{h,i}}$
-			\end{large}
-		\EndFor
-		\ForAll{$[h,i] \in \mathcal{T}$}
-			\State $U_{h,i}\gets \mu_{h,i}+\sqrt{\frac{2\ln n}{T_{h,i}}}+\mu_1 \rho^h$
-		\EndFor
-		\State $B_{H+1,2I-1},B_{H+1,2I} \gets +\infty,+\infty$
-		\State $\mathcal{T}' \gets \mathcal{T}$
-		\While{$\mathcal{T}' \neq \{[0,1]\}$}
-			\State $[h,i] \gets \text{Leaf}(\mathcal{T}')$
-			\State $B_{h,i} \gets \min\{U_{h,i},B_{h+1,2i-1},B_{h+1,2i}\}$
-			\State $\mathcal{T}' \gets \mathcal{T}'\{[h,i]\}$
-		\EndWhile
-	\EndFor
-\end{algorithmic}
-\end{algorithm}
-\subsection{POO}
-\begin{algorithm}[!Htop]
-\caption{the hierarchical optimistic optimization algorithm}
-\begin{algorithmic}[1]
-	\For{n = 1 .. Nev}
-		\State $P \gets {[0,1]}$
-		\State $h,i\gets 0,1$
-		\While{$[h,i] \in \mathcal{T}$}
-			\If{$B_{h+1,2i-1} >B_{h+1,2i}$}
-				\State $h,i \gets h+1,2i-1 $
-			\ElsIf{$B_{h+1,2i-1} <B_{h+1,2i}$}
-				\State $h,i \gets h+1,2i $
-			\Else
-				\State $Z \sim Ber(0.5)$
-				\State $h,i \gets h+1,2i-Z$
-			\EndIf
-			\State $P \gets P \cup {[h,i]}$
-		\EndWhile
-		\State $H,I \gets h,i$
-		\State $X \sim \mathcal{U}(\mathcal{P}_{H,I})$
-		\State reward: $Y = f(X)$
-		\State $\mathcal{T} \gets \mathcal{T} \cup {[H,I]}$
-		\ForAll{$[h,i] \in P$}
-			\State $T_{h,i} \gets T_{h,i}+1$
-			\begin{large}
-			\State $\mu_{h,i}\gets (1-\frac{1}{T_{h,i}})\mu_{h,i}+\frac{Y}{T_{h,i}}$
-			\end{large}
-		\EndFor
-		\ForAll{$[h,i] \in \mathcal{T}$}
-			\State $U_{h,i}\gets \mu_{h,i}+\sqrt{\frac{2\ln n}{T_{h,i}}}+\mu_1 \rho^h$
-		\EndFor
-		\State $B_{H+1,2I-1},B_{H+1,2I} \gets +\infty,+\infty$
-		\State $\mathcal{T}' \gets \mathcal{T}$
-		\While{$\mathcal{T}' \neq \{[0,1]\}$}
-			\State $[h,i] \gets \text{Leaf}(\mathcal{T}')$
-			\State $B_{h,i} \gets \min\{U_{h,i},B_{h+1,2i-1},B_{h+1,2i}\}$
-			\State $\mathcal{T}' \gets \mathcal{T}'\{[h,i]\}$
-		\EndWhile
-	\EndFor
-\end{algorithmic}
-\end{algorithm}
-\subsection{SOO}
-\begin{algorithm}[!ht]
-\caption{the hierarchical optimistic optimization algorithm}
-\begin{algorithmic}[1]
-	\For{n = 1 .. Nev}
-		\State $P \gets {[0,1]}$
-		\State $h,i\gets 0,1$
-		\While{$[h,i] \in \mathcal{T}$}
-			\If{$B_{h+1,2i-1} >B_{h+1,2i}$}
-				\State $h,i \gets h+1,2i-1 $
-			\ElsIf{$B_{h+1,2i-1} <B_{h+1,2i}$}
-				\State $h,i \gets h+1,2i $
-			\Else
-				\State $Z \sim Ber(0.5)$
-				\State $h,i \gets h+1,2i-Z$
-			\EndIf
-			\State $P \gets P \cup {[h,i]}$
-		\EndWhile
-		\State $H,I \gets h,i$
-		\State $X \sim \mathcal{U}(\mathcal{P}_{H,I})$
-		\State reward: $Y = f(X)$
-		\State $\mathcal{T} \gets \mathcal{T} \cup {[H,I]}$
-		\ForAll{$[h,i] \in P$}
-			\State $T_{h,i} \gets T_{h,i}+1$
-			\begin{large}
-			\State $\mu_{h,i}\gets (1-\frac{1}{T_{h,i}})\mu_{h,i}+\frac{Y}{T_{h,i}}$
-			\end{large}
-		\EndFor
-		\ForAll{$[h,i] \in \mathcal{T}$}
-			\State $U_{h,i}\gets \mu_{h,i}+\sqrt{\frac{2\ln n}{T_{h,i}}}+\mu_1 \rho^h$
-		\EndFor
-		\State $B_{H+1,2I-1},B_{H+1,2I} \gets +\infty,+\infty$
-		\State $\mathcal{T}' \gets \mathcal{T}$
-		\While{$\mathcal{T}' \neq \{[0,1]\}$}
-			\State $[h,i] \gets \text{Leaf}(\mathcal{T}')$
-			\State $B_{h,i} \gets \min\{U_{h,i},B_{h+1,2i-1},B_{h+1,2i}\}$
-			\State $\mathcal{T}' \gets \mathcal{T}'\{[h,i]\}$
-		\EndWhile
-	\EndFor
-\end{algorithmic}
-\end{algorithm}
-\subsection{HCT}
-\begin{algorithm}[!ht]
-\caption{the hierarchical optimistic optimization algorithm}
-\begin{algorithmic}[1]
-	\For{n = 1 .. Nev}
-		\State $P \gets {[0,1]}$
-		\State $h,i\gets 0,1$
-		\While{$[h,i] \in \mathcal{T}$}
-			\If{$B_{h+1,2i-1} >B_{h+1,2i}$}
-				\State $h,i \gets h+1,2i-1 $
-			\ElsIf{$B_{h+1,2i-1} <B_{h+1,2i}$}
-				\State $h,i \gets h+1,2i $
-			\Else
-				\State $Z \sim Ber(0.5)$
-				\State $h,i \gets h+1,2i-Z$
-			\EndIf
-			\State $P \gets P \cup {[h,i]}$
-		\EndWhile
-		\State $H,I \gets h,i$
-		\State $X \sim \mathcal{U}(\mathcal{P}_{H,I})$
-		\State reward: $Y = f(X)$
-		\State $\mathcal{T} \gets \mathcal{T} \cup {[H,I]}$
-		\ForAll{$[h,i] \in P$}
-			\State $T_{h,i} \gets T_{h,i}+1$
-			\begin{large}
-			\State $\mu_{h,i}\gets (1-\frac{1}{T_{h,i}})\mu_{h,i}+\frac{Y}{T_{h,i}}$
-			\end{large}
-		\EndFor
-		\ForAll{$[h,i] \in \mathcal{T}$}
-			\State $U_{h,i}\gets \mu_{h,i}+\sqrt{\frac{2\ln n}{T_{h,i}}}+\mu_1 \rho^h$
-		\EndFor
-		\State $B_{H+1,2I-1},B_{H+1,2I} \gets +\infty,+\infty$
-		\State $\mathcal{T}' \gets \mathcal{T}$
-		\While{$\mathcal{T}' \neq \{[0,1]\}$}
-			\State $[h,i] \gets \text{Leaf}(\mathcal{T}')$
-			\State $B_{h,i} \gets \min\{U_{h,i},B_{h+1,2i-1},B_{h+1,2i}\}$
-			\State $\mathcal{T}' \gets \mathcal{T}'\{[h,i]\}$
-		\EndWhile
-	\EndFor
-\end{algorithmic}
-\end{algorithm}
-\subsection{ATB}
+%%%%%%%%%%%%%%%%%%%%%%%%%%% CUMULATIVE 5000 POINTS %%%%%%%%%%%%%%%%%%%%
+\vspace{-10cm}
+\begin{figure}[!ht]
+\label{fig:cumulative5000}
+\hspace{-5cm}\includegraphics[trim = {0 6cm 0 4.5cm},clip]{cumulative5000.pdf}
+\vspace{-12cm}
+  \caption{The cumulative regret of the 4 algorithms on the three difficult functions, with 5000 evaluations. From left to right : Grill function, Garland function, Sinprod function. }
+\end{figure}
 
-%%% BIBILIOGRAPHY %%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%  MARGINAL 5000 POINTS  %%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[!ht]
+\label{fig:position1000}
+\hspace{-5cm}\includegraphics[trim = {0 6cm 0 4cm},clip]{marginal1000.pdf}
+\vspace{-4cm}
+  \caption{The cumulative regret of the 5 algorithms on the three difficult functions, with 1000 evaluations. From left to right : Grill function, Garland function, Sinprod function. }
+\end{figure}
+
+%%%% BIBILIOGRAPHY %%%%
+\clearpage
 \bibliographystyle{plain}
 \bibliography{Biblio}{}
 \nocite{*}

@@ -78,4 +78,4 @@ def SOO(f,n,k,hmax,delta,noise):
 	MUh = np.array(MUh)
 	im = MUh[np.argmax(MUh[:,0]),1]
 	#print len(T)
-	return (2*im-1.)/2**(hm+1),REW,P # Milieu du meilleur segment
+	return (2*im-1.)/2**(hm+1),P,REW # Milieu du meilleur segment
