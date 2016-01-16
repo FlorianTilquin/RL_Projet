@@ -23,6 +23,15 @@
 \newtheorem{prop}{Proposition}
 \newtheorem{rmk}{Remark}
 
+\input{zMC.tex}
+\input{zMCgraphe.tex}
+\tikzset{
+zplot/.style={opacity=.8}
+}
+\hypersetup{ colorlinks=true, linkcolor=blue,
+	citecolor=green, filecolor=magenta,
+	urlcolor=cyan }
+
 \begin{document}
 
 \AtBeginSection[]
@@ -53,32 +62,107 @@
 \section{Introduction}
 \begin{frame}
 \frametitle{Problem Statement}
+Given a function $f$, the goal is:
+\begin{equation}
+\mbox{maximize } f(x) \mbox{ for } x\in [0,1]^p
+\end{equation}
+Assumptions:
+\begin{itemize}
+\item $f$ is complicated to evaluate
+\item $f$ is not smooth
+\end{itemize}
 \end{frame}
 
 \begin{frame}
 \frametitle{The Multi-Armed Bandit}
+Idea:
+\begin{itemize}
+\item Set a tree structure $\mathcal{T}$ over $[0,1]^p$, such that for each depth $h$, the set of nodes is a partition of the space
+\item Define a sequence $(x_t,y_t)=(\mathcal{U}(I_{h_t,i_t}),f(x_t)+\xi_t)$
+\item Choose $h_{t+1},i_{t+1}$ in function of $(x_{t'},y_{t'})_{t'<t}$
+\end{itemize}
+The construction can be set to minimize either:
+\begin{itemize}
+\item Simple regret: \begin{equation}
+\underset{t\le T_{max}}{argmin}|f^*-y_t|
+\end{equation}
+\item Cumulative regret: \begin{equation}\underset{t\le T_{max}}{\sum}|f^*-y_t| \end{equation}
+\end{itemize}
 \end{frame}
 
 \section{Algorithms}
 \begin{frame}
 \frametitle{HOO and POO}
+This algorithm is called \textit{Optimistic} because its idea is to sequentially building a tree and try the most promising children.\\
+\textbf{Upper bound:} $B_{h,i}=min(U_{h,i},max(B_{h+1,2i-1},B_{h,2i}))$ where:
+\begin{equation}
+\label{uhoo}
+U_{h,i}=\widehat{\mu}_{h,i}+\nu \rho^h+\sqrt{\dfrac{2\log(T_{max})}{n_{h,i}}}
+\end{equation}
+\textbf{Update rule:} At each time step, the most promising child with respect to B is added to the tree.
 \end{frame}
 
 \begin{frame}
 \frametitle{HCT}
+In order to be pulled, an arm must maximize $B$ among the arms that have not been pulled enough yet. In order to reduce computational cost, $U$ is refreshed only when $t$ is a power of 2.\\
+\textbf{Upper bound:} $B_{h,i}=min(U_{h,i},max(B_{h+1,2i-1},B_{h,2i}))$ where:
+\begin{equation}
+\label{uhct}
+U_{h,i}=\widehat{\mu}_{h,i}+\nu \rho^h+\sqrt{\dfrac{c^2\log(1/min(1,\frac{c_1\delta}{2^{\lfloor \log(t) \rfloor + 1}}))}{n_{h,i}}}
+\end{equation}
+\textbf{Update rule:} Only the leaves of the current covering tree that have not been pulled enough with respect to a certain threshold $\tau_h(t)$ are expanded.
 \end{frame}
 
 \begin{frame}
 \frametitle{StoSOO}
+This algorithm is called \textit{simultaneous} because it can perform at each time steps as many evaluations as the depth of its current covering tree. Each node a its own evaluation budget $k$ in order no to spend to much budget on the first nodes.\\
+\textbf{Upper bound:} In order to be pulled, a leaf must both have a positive remaining individual budget and maximize $B$ among the leaves of the same depth:
+\begin{equation}
+\label{bsoo}
+B_{h,i}=\widehat{\mu}_{h,i}+\sqrt{\dfrac{\log(\frac{T_{max}k}{\delta})}{2n_{h,i}}}
+\end{equation}
+\textbf{Update rule:} Once a node that maximizes $B$ has used its entire budget, it is expanded.
 \end{frame}
 
 \begin{frame}
 \frametitle{ATB}
+The tree is not sequentially built but given as an input and the evaluations are performed among a set of \textit{active boxes} or \textit{active nodes}. The statistics of the children of active nodes are updated each time an arm is pulled.\\
+\textbf{Upper bound:} At each time step, the arm pulled is chosen among the active nodes and maximizes:
+\begin{equation}
+B_{h,i} = \widehat{\mu}_{h,i}+(1+2\nu)r_{h,i}
+\end{equation}
+where $r_{h,i}=2\sqrt{\dfrac{\log[2^{h+1}(\tau+n_{h,i})]}{n_{h,i}}}$ is the confidence radius of the interval.\\
+\textbf{Update rule:} If an active node has a radius small enough compared to the ones of its children, it is removed and replaced by them.
 \end{frame}
 
 \section{Results}
 \begin{frame}
 \frametitle{Tested functions}
+\begin{figure}
+\label{fig:functions}
+\hbox{\hspace{-1.0cm}\begin{mygraph}{xmin=0, xmax=1, %
+                ymin=0, ymax=1, %
+                sizex=3, sizey=3}%
+                {nomx=zbra, nomy=zbra}%
+                {0,0.25,...,1}{0,0.25,...,1}
+  \draw[zplot, blue] plot file {Data/Prodsin.data};
+\end{mygraph}\hspace{-1cm}
+\begin{mygraph}{xmin=0, xmax=1, %
+                ymin=0, ymax=1, %
+                sizex=3, sizey=3}%
+                {nomx=zbra, nomy=zbra}%
+                {0,0.25,...,1}{0,0.25,...,1}
+  \draw[zplot, blue] plot file {Data/Garland.data};
+\end{mygraph}\hspace{-1cm}
+\begin{mygraph}{xmin=0, xmax=1, %
+                ymin=-0.75, ymax=0.25, %
+                sizex=3, sizey=3}%
+                {nomx=zbra, nomy=zbra}%
+                {0,0.25,...,1}{-0.75,-0.5,...,0.25}
+  \draw[zplot, blue] plot file {Data/Grill.data};
+\end{mygraph}\hss}
+\caption{From the left to the right: Two-sine product, Garlang, Grill.}
+\end{figure}
 \end{frame}
 
 \begin{frame}
