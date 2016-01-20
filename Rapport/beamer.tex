@@ -9,12 +9,12 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{bbold}
-\usepackage{lmodern} 
+\usepackage{lmodern}
 \newcommand{\argmin}{\arg\!\min}
 
 \usepackage{multimedia}
 \usepackage{tikz}
-\usepackage{graphicx} 
+\usepackage{graphicx}
 \usepackage{amsmath}
 \usepackage{amsthm}
 \usepackage{amsfonts}
@@ -45,7 +45,7 @@ zplot/.style={opacity=.8}
 \title{MVA Reinforcement Learning}
 \subtitle{Optimization of very difficult functions}
 \author{Nathan de Lara, Florian Tilquin}
-\date{January 25 2016} 
+\date{January 25 2016}
 
 
 \begin{frame}
@@ -167,10 +167,85 @@ where $r_{h,i}=2\sqrt{\dfrac{\log[2^{h+1}(\tau+n_{h,i})]}{n_{h,i}}}$ is the conf
 
 \begin{frame}
 \frametitle{Experimental protocol}
+We record
+\begin{itemize}
+	\item The abscissa $x \in X$ the algorithm went through
+	\item The reward $rew(x)$ it obtained
+\end{itemize}
+Given,
+\begin{itemize}
+	\item Total number of function evaluations $T_{max}$
+	\item Number of runs $N$
+\end{itemize}
+We compare the algorithms over
+\begin{itemize}
+	\item Cumulative regret $\tilde{R}$
+	\item Simple regret $R$
+	\item Best result
+	\item Computation time
+\end{itemize}
+As mentioned, the algorithms have different objectives (minimizing cumulative or simple regret for example), thus one must evaluate the performances according to each design.
+
 \end{frame}
 
 \begin{frame}
-\frametitle{Performances}
+\frametitle{Sampled points}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%  POSITIONS 1000 POINTS  %%%%%%%%%%%%%%%%%%%%%
+\begin{figure}
+\vspace{-0.75cm}
+\includegraphics[trim = {0 6cm 0 4cm},clip,scale = 0.5]{marginal1000.pdf}
+\vspace{-2.25cm}
+  \caption{\label{fig:position1000}Points sampled by the algorithms for Sinprod with 1000 evaluations. From top left to bottom right : HOO, POO, StoSOO and HCT. For this function, $x^*\simeq 0.86$ and the second best point is roughly in $0.39$.}
+\end{figure}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%% CUMULATIVE 1000 POINTS %%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Cumulative Regret}
+%\hspace*{-2cm}
+%\hfill
+\vfill
+\begin{figure}
+	\includegraphics[trim={2cm 6cm 0 4cm},clip,scale = 0.65]{cumulative1000.pdf}
+\vspace{-8.25cm}
+\caption{\label{fig:cumulative1000}The cumulative regret of the 5 algorithms on the three difficult functions, with 1000 evaluations. From left to right : Grill function, Garland function, Sinprod function.}
+\end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%% NOISE = 0.1 %%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Noised best estimator}
+\begin{figure}
+\includegraphics[trim={2cm 6cm 1cm 4cm},clip,scale = 0.65]{best1000_01.pdf}\\
+\vspace*{-8cm}
+ \caption{\label{fig:noise01}Best current regret under noisy estimation sampled from $\mathcal{N}(0,0.1)$ . From left to right : Grill function, Garland function, Sinprod function.}
+\end{figure}
+\end{frame}
+\begin{frame}
+\begin{figure}
+\frametitle{Noised best estimator}
+\includegraphics[trim={2cm 6cm 1cm 4cm},clip,scale = 0.65]{best1000_1.pdf}
+\vspace*{-8cm}
+ \caption{\label{fig:noise1}Best current regret under noisy estimation sampled from $\mathcal{N}(0,1)$. From left to right : Grill function, Garland function, Sinprod function.}
+\end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%% ATB %%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\vspace{1cm}
+\begin{figure}
+\includegraphics[trim={1cm 6cm 1cm 4cm},clip,scale = 0.64]{ATB.pdf}
+\vspace*{-7cm}
+\caption{\label{fig:atb}From the left to the right: simple and cumulative regrets and sampled points for ATB algorithm on Sinprod optimization.}
+\end{figure}
+\end{frame}
+%%%% BIBILIOGRAPHY %%%%
+\begin{frame}
+	\small{
+\bibliographystyle{plain}
+\bibliography{Biblio}{}
+\nocite{*}
+}
+\label{lastpage}
 \end{frame}
 
 
