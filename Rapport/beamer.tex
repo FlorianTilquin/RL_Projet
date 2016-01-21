@@ -66,10 +66,10 @@ Given a function $f$, the goal is:
 \begin{equation}
 \mbox{maximize } f(x) \mbox{ for } x\in [0,1]^p
 \end{equation}
-Assumptions:
+Assumptions: $f$ is potentially:
 \begin{itemize}
-\item $f$ is complicated to evaluate
-\item $f$ is not smooth
+\item complicated to evaluate
+\item not smooth
 \end{itemize}
 \end{frame}
 
@@ -167,24 +167,18 @@ where $r_{h,i}=2\sqrt{\dfrac{\log[2^{h+1}(\tau+n_{h,i})]}{n_{h,i}}}$ is the conf
 
 \begin{frame}
 \frametitle{Experimental protocol}
-We record
+For $T_{max}=1000,5000$ we record:
 \begin{itemize}
 	\item The abscissa $x \in X$ the algorithm went through
 	\item The reward $rew(x)$ it obtained
 \end{itemize}
-Given,
-\begin{itemize}
-	\item Total number of function evaluations $T_{max}$
-	\item Number of runs $N$
-\end{itemize}
-We compare the algorithms over
+And compare the algorithms over:
 \begin{itemize}
 	\item Cumulative regret $\tilde{R}$
 	\item Simple regret $R$
 	\item Best result
 	\item Computation time
 \end{itemize}
-As mentioned, the algorithms have different objectives (minimizing cumulative or simple regret for example), thus one must evaluate the performances according to each design.
 
 \end{frame}
 
@@ -206,7 +200,7 @@ As mentioned, the algorithms have different objectives (minimizing cumulative or
 \vfill
 \begin{figure}
 	\includegraphics[trim={2cm 6cm 0 4cm},clip,scale = 0.65]{cumulative1000.pdf}
-\vspace{-8.25cm}
+\vspace{-7.25cm}
 \caption{\label{fig:cumulative1000}The cumulative regret of the 5 algorithms on the three difficult functions, with 1000 evaluations. From left to right : Grill function, Garland function, Sinprod function.}
 \end{figure}
 \end{frame}
@@ -231,6 +225,7 @@ As mentioned, the algorithms have different objectives (minimizing cumulative or
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%% ATB %%%%%%%%%%%%%%%%%%%%
 \begin{frame}
+\frametitle{ATB results}
 \vspace{1cm}
 \begin{figure}
 \includegraphics[trim={1cm 6cm 1cm 4cm},clip,scale = 0.64]{ATB.pdf}
