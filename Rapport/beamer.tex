@@ -38,8 +38,8 @@ zplot/.style={opacity=.8}
   \end{frame}
 }
 
-\title{MVA Reinforcement Learning}
-\subtitle{Optimization of very difficult functions}
+\title{MVA Reinforcement Learning\\
+Optimization of very difficult functions}
 \author{Nathan de Lara, Florian Tilquin}
 \date{January 25 2016}
 
@@ -87,21 +87,36 @@ The construction can be set to minimize either:
 \end{itemize}
 \end{frame}
 
+\begin{frame}
+\frametitle{Optimistic Algorithms}
+Idea:
+\begin{itemize}
+\item For each node save an upper bound of the expected reward
+\item Find the most promising nodes
+\item Select the best one and update the statistics
+\end{itemize}
+
+\end{frame}
+
 \section{Algorithms}
 \begin{frame}
 \frametitle{HOO and POO}
-This algorithm is called \textit{Optimistic} because its idea is to sequentially building a tree and try the most promising children.\\
+
 \textbf{Upper bound:} $B_{h,i}=min(U_{h,i},max(B_{h+1,2i-1},B_{h,2i}))$ where:
 \begin{equation}
 \label{uhoo}
 U_{h,i}=\widehat{\mu}_{h,i}+\nu \rho^h+\sqrt{\dfrac{2\log(T_{max})}{n_{h,i}}}
 \end{equation}
-\textbf{Update rule:} At each time step, the most promising child with respect to B is added to the tree.
+\textbf{Update rule:} At each time step, the most promising child with respect to B is added to the tree.\\
+\vspace{0.5cm}
+\textbf{POO:} running several HOO instances in parallel to find the best parameters.
+
+
 \end{frame}
 
 \begin{frame}
 \frametitle{HCT}
-In order to be pulled, an arm must maximize $B$ among the arms that have not been pulled enough yet. In order to reduce computational cost, $U$ is refreshed only when $t$ is a power of 2.\\
+In order to reduce computational cost, $U$ is refreshed only when $t$ is a power of 2.\\
 \textbf{Upper bound:} $B_{h,i}=min(U_{h,i},max(B_{h+1,2i-1},B_{h,2i}))$ where:
 \begin{equation}
 \label{uhct}
@@ -112,8 +127,8 @@ U_{h,i}=\widehat{\mu}_{h,i}+\nu \rho^h+\sqrt{\dfrac{c^2\log(1/min(1,\frac{c_1\de
 
 \begin{frame}
 \frametitle{StoSOO}
-This algorithm is called \textit{simultaneous} because it can perform at each time steps as many evaluations as the depth of its current covering tree. Each node a its own evaluation budget $k$ in order no to spend to much budget on the first nodes.\\
-\textbf{Upper bound:} In order to be pulled, a leaf must both have a positive remaining individual budget and maximize $B$ among the leaves of the same depth:
+This algorithm is called \textit{simultaneous} because it can perform at each time steps as many evaluations as the depth of its current covering tree. Each node has its own evaluation budget $k$ in order no to spend to much budget on the first nodes.\\
+\textbf{Upper bound:}
 \begin{equation}
 \label{bsoo}
 B_{h,i}=\widehat{\mu}_{h,i}+\sqrt{\dfrac{\log(\frac{T_{max}k}{\delta})}{2n_{h,i}}}
@@ -123,12 +138,12 @@ B_{h,i}=\widehat{\mu}_{h,i}+\sqrt{\dfrac{\log(\frac{T_{max}k}{\delta})}{2n_{h,i}
 
 \begin{frame}
 \frametitle{ATB}
-The tree is not sequentially built but given as an input and the evaluations are performed among a set of \textit{active boxes} or \textit{active nodes}. The statistics of the children of active nodes are updated each time an arm is pulled.\\
-\textbf{Upper bound:} At each time step, the arm pulled is chosen among the active nodes and maximizes:
+Evaluations are performed among a set of \textit{active boxes} or \textit{active nodes}. The statistics of the children of active nodes are updated each time an arm is pulled.\\
+\textbf{Upper bound:}
 \begin{equation}
 B_{h,i} = \widehat{\mu}_{h,i}+(1+2\nu)r_{h,i}
 \end{equation}
-where $r_{h,i}=2\sqrt{\dfrac{\log[2^{h+1}(\tau+n_{h,i})]}{n_{h,i}}}$ is the confidence radius of the interval.\\
+where $r_{h,i}=2\sqrt{\dfrac{\log[2^{h+1}(\tau+n_{h,i})]}{n_{h,i}}}$ .\\
 \textbf{Update rule:} If an active node has a radius small enough compared to the ones of its children, it is removed and replaced by them.
 \end{frame}
 
@@ -158,7 +173,7 @@ where $r_{h,i}=2\sqrt{\dfrac{\log[2^{h+1}(\tau+n_{h,i})]}{n_{h,i}}}$ is the conf
                 {0,0.25,...,1}{-0.75,-0.5,...,0.25}
   \draw[zplot, blue] plot file {Data/Grill.data};
 \end{mygraph}\hss}
-\caption{From the left to the right: Two-sine product, Garlang, Grill.}
+\caption{From the left to the right: Two-sine product, Garland, Grill.}
 \end{figure}
 \end{frame}
 
@@ -174,7 +189,6 @@ And compare the algorithms over:
 	\item Cumulative regret $\tilde{R}$
 	\item Simple regret $R$
 	\item Best result
-	\item Computation time
 \end{itemize}
 
 \end{frame}
@@ -214,7 +228,7 @@ And compare the algorithms over:
 \begin{frame}
 \begin{figure}
 \frametitle{Noised best estimator}
-\includegraphics[trim={2cm 6cm 1cm 4cm},clip,scale = 0.65]{best1000_1.pdf}
+\includegraphics[trim={2cm 6cm 0.8cm 4cm},clip,scale = 0.65]{best1000_1.pdf}
 \vspace*{-8cm}
  \caption{\label{fig:noise1}Best current regret under noisy estimation sampled from $\mathcal{N}(0,1)$. From left to right : Grill function, Garland function, Sinprod function.}
 \end{figure}
