@@ -55,9 +55,9 @@ zplot/.style={opacity=.8}
 \usebackgroundtemplate{ }
 
 \section*{Plan}
-\begin{frame}
-  \tableofcontents[]
-\end{frame}
+%\begin{frame}
+%  \tableofcontents[]
+%\end{frame}
 
 \section{Introduction}
 \begin{frame}
@@ -70,6 +70,7 @@ Assumptions: $f$ is potentially:
 \begin{itemize}
 \item complicated to evaluate
 \item not smooth
+\item noisy
 \end{itemize}
 \end{frame}
 
@@ -186,10 +187,10 @@ And compare the algorithms over:
 \frametitle{Sampled points}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%  POSITIONS 1000 POINTS  %%%%%%%%%%%%%%%%%%%%%
 \begin{figure}
-\vspace{-0.75cm}
+\vspace{-0.5cm}
 \includegraphics[trim = {0 6cm 0 4cm},clip,scale = 0.5]{marginal1000.pdf}
-\vspace{-2.25cm}
-  \caption{\label{fig:position1000}Points sampled by the algorithms for Sinprod with 1000 evaluations. From top left to bottom right : HOO, POO, StoSOO and HCT. For this function, $x^*\simeq 0.86$ and the second best point is roughly in $0.39$.}
+\vspace{-2.75cm}
+  \caption{\label{fig:position1000}Points sampled by the algorithms for Sinprod with 1000 evaluations. From top left to bottom right : HOO, POO, HCT and StoSOO. For this function, $x^*\simeq 0.86$ and the second best point is roughly in $0.39$.}
 \end{figure}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%% CUMULATIVE 1000 POINTS %%%%%%%%%%%%%%%%%%%%
