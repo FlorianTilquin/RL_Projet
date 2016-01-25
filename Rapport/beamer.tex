@@ -19,10 +19,6 @@
 \usepackage{amsthm}
 \usepackage{amsfonts}
 
-
-\newtheorem{prop}{Proposition}
-\newtheorem{rmk}{Remark}
-
 \input{zMC.tex}
 \input{zMCgraphe.tex}
 \tikzset{
@@ -144,21 +140,21 @@ where $r_{h,i}=2\sqrt{\dfrac{\log[2^{h+1}(\tau+n_{h,i})]}{n_{h,i}}}$ is the conf
 \hbox{\hspace{-1.0cm}\begin{mygraph}{xmin=0, xmax=1, %
                 ymin=0, ymax=1, %
                 sizex=3, sizey=3}%
-                {nomx=zbra, nomy=zbra}%
+                {nomx=, nomy=}%
                 {0,0.25,...,1}{0,0.25,...,1}
   \draw[zplot, blue] plot file {Data/Prodsin.data};
 \end{mygraph}\hspace{-1cm}
 \begin{mygraph}{xmin=0, xmax=1, %
                 ymin=0, ymax=1, %
                 sizex=3, sizey=3}%
-                {nomx=zbra, nomy=zbra}%
+                {nomx=, nomy=}%
                 {0,0.25,...,1}{0,0.25,...,1}
   \draw[zplot, blue] plot file {Data/Garland.data};
 \end{mygraph}\hspace{-1cm}
 \begin{mygraph}{xmin=0, xmax=1, %
                 ymin=-0.75, ymax=0.25, %
                 sizex=3, sizey=3}%
-                {nomx=zbra, nomy=zbra}%
+                {nomx=, nomy=}%
                 {0,0.25,...,1}{-0.75,-0.5,...,0.25}
   \draw[zplot, blue] plot file {Data/Grill.data};
 \end{mygraph}\hss}
@@ -210,7 +206,7 @@ And compare the algorithms over:
 \begin{frame}
 \frametitle{Noised best estimator}
 \begin{figure}
-\includegraphics[trim={2cm 6cm 1cm 4cm},clip,scale = 0.65]{best1000_01.pdf}\\
+\includegraphics[trim={2cm 6cm 1cm 4cm},clip,scale = 0.66]{best1000_01.pdf}\\
 \vspace*{-8cm}
  \caption{\label{fig:noise01}Best current regret under noisy estimation sampled from $\mathcal{N}(0,0.1)$ . From left to right : Grill function, Garland function, Sinprod function.}
 \end{figure}
@@ -227,9 +223,9 @@ And compare the algorithms over:
 %%%%%%%%%%%%%%%%%%%%%%%%%%% ATB %%%%%%%%%%%%%%%%%%%%
 \begin{frame}
 \frametitle{ATB results}
-\vspace{1cm}
 \begin{figure}
-\includegraphics[trim={1cm 6cm 1cm 4cm},clip,scale = 0.64]{ATB.pdf}
+\hspace*{-0.2cm}
+\includegraphics[trim={1.1cm 6cm 1cm 4cm},clip,scale = 0.64]{ATB.pdf}
 \vspace*{-7cm}
 \caption{\label{fig:atb}From the left to the right: simple and cumulative regrets and sampled points for ATB algorithm on Sinprod optimization.}
 \end{figure}

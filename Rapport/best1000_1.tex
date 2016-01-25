@@ -1,0 +1,77 @@
+\documentclass{article}
+\usepackage{dsfont}
+\usepackage{bbold}
+\usepackage{stmaryrd}
+\usepackage{mathrsfs}
+\usepackage{fancyhdr}
+\usepackage{algorithm,algpseudocode}
+\usepackage{graphicx}
+\input{zMC.tex}
+\input{zMCgraphe.tex}
+\zzpackages[english]
+%\usetikzlibrary{external}\tikzexternalize
+
+\tikzset{
+zplot/.style={opacity=.8}
+}
+
+\begin{document}
+\hbox{\hspace{-3.4cm}\begin{mygraph}
+				{xmin=0, xmax=10, %
+                ymin=-18, ymax=-1, %
+                sizex=5, sizey=5}%
+                {nomx=Number of steps, nomy=Distance to maximum}%
+                {}{}
+  \draw[zplot, blue!50!black] plot file {Plot/bestregret_HOO_grill_1000-1.0.data};
+  \draw[zplot, red!60!black] plot file {Plot/bestregret_POO_grill_1000-1.0.data};
+  \draw[zplot, green!50!black] plot file {Plot/bestregret_SOO_grill_1000-1.0.data};
+  \draw[zplot, black] plot file {Plot/bestregret_HCT_grill_1000-1.0.data};
+  \graduationX{ 1/100, 2/200, 3/300, 4/400, 5/500, 6/600, 7/700, 8/800, 9/900, 1/1000 }{}
+  \graduationY{ -3/$10^{-3}$,-6/$10^{-6}$,-9/$10^{-9}$,-12/$10^{-12}$,-15/$10^{-15}$}{}%, 6/600, 7/700, 8/800, 9/900, 1/1000-1 }{}
+  \begin{mylegend}{x=7, y=-2, n=4, t=2.2, scale=.7}
+	    \newlegend{blue!50!black}{HOO}
+		  \newlegend{red!60!black}{POO}
+		  \newlegend{green!50!black}{SOO}
+		  \newlegend{black}{HCT}
+	  \end{mylegend}
+  \end{mygraph}\hspace{-0.5cm}
+\begin{mygraph}
+				{xmin=0, xmax=10, %
+                ymin=-9, ymax=-1, %
+                sizex=5, sizey=5}%
+                {nomx=Number of steps, nomy=Distance to maximum}%
+                {}{}
+  \draw[zplot, blue!50!black] plot file {Plot/bestregret_HOO_garland_1000_1.data};
+  \draw[zplot, red!60!black] plot file {Plot/bestregret_POO_garland_1000-1.0.data};
+  \draw[zplot, green!50!black] plot file {Plot/bestregret_SOO_garland_1000-1.0.data};
+  \draw[zplot, black] plot file {Plot/bestregret_HCT_garland_1000-1.0.data};
+  \graduationX{ 1/100, 2/200, 3/300, 4/400, 5/500, 6/600, 7/700, 8/800, 9/900, 1/1000 }{}
+  \graduationY{ -2/$10^{-2}$,-4/$10^{-4}$,-6/$10^{-6}$,-8/$10^{-8}$}{}%, 6/600, 7/700, 8/800, 9/900, 1/1000-1 }{}
+  \begin{mylegend}{x=7, y=-1.5, n=4, t=2.2, scale=.7}
+	    \newlegend{blue!50!black}{HOO}
+		  \newlegend{red!60!black}{POO}
+		  \newlegend{green!50!black}{SOO}
+		  \newlegend{black}{HCT}
+	  \end{mylegend}
+\end{mygraph}\hspace{-0.5cm}
+\begin{mygraph}
+				{xmin=0, xmax=10, %
+                ymin=-17, ymax=-1, %
+                sizex=5, sizey=5}%
+                {nomx=Number of steps, nomy=Distance to maximum}%
+                {}{}
+  \draw[zplot, blue!50!black] plot file {Plot/bestregret_HOO_sinprod_1000-1.0.data};
+  \draw[zplot, red!60!black] plot file {Plot/bestregret_POO_sinprod_1000-1.0.data};
+  \draw[zplot, green!50!black] plot file {Plot/bestregret_SOO_sinprod_1000-1.0.data};
+  \draw[zplot, black] plot file {Plot/bestregret_HCT_sinprod_1000-1.0.data};
+  \graduationX{ 1/100, 2/200, 3/300, 4/400, 5/500, 6/600, 7/700, 8/800, 9/900, 1/1000 }{}
+  \graduationY{ -3/$10^{-3}$,-6/$10^{-6}$,-9/$10^{-9}$,-12/$10^{-12}$,-15/$10^{-15}$}{}%, 6/600, 7/700, 8/800, 9/900, 1/1000-1 }{}
+  \begin{mylegend}{x=7, y=-2, n=4, t=2.2, scale=.7}
+	    \newlegend{blue!50!black}{HOO}
+		  \newlegend{red!60!black}{POO}
+		  \newlegend{green!50!black}{SOO}
+		  \newlegend{black}{HCT}
+	  \end{mylegend}
+\end{mygraph}}
+\end{document}
+
